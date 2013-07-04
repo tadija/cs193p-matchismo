@@ -10,17 +10,27 @@
 
 @implementation PlayingCard
 
-// match override is added in the second walkthrough
 - (int)match:(NSArray *)otherCards
 {
     int score = 0;
     
-    if (otherCards.count == 1) {
-        PlayingCard *otherCard = [otherCards lastObject];
-        if ([otherCard.suit isEqualToString:self.suit]) {
-            score = 1;
-        } else if (otherCard.rank == self.rank) {
-            score = 4;
+    // check if otherCards are PlayingCard class
+    NSMutableArray *otherPlayingCards = [[NSMutableArray alloc] initWithCapacity:[otherCards count]];
+    for (id otherCard in otherCards) {
+        if ([otherCard isKindOfClass:[PlayingCard class]]) {
+            PlayingCard *otherPlayingCard = (PlayingCard *)otherCard;
+            [otherPlayingCards addObject:otherPlayingCard];
+        }
+    }
+    
+    // add score for each PlayingCard
+    for (PlayingCard *otherPlayingCard in otherPlayingCards) {
+        if ([otherPlayingCard.suit isEqualToString:self.suit]) {
+            score += 1;
+        } else if (otherPlayingCard.rank == self.rank) {
+            score += 4;
+        } else {
+            score = 0;
         }
     }
     

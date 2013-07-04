@@ -21,4 +21,8 @@
 
 @property (nonatomic, readonly) int score;
 
+@property (nonatomic) NSUInteger numberOfCards;
+
+@property (nonatomic, readonly) NSMutableArray *allFlipsInfo;
+
 @end

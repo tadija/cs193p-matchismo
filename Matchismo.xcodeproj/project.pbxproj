@@ -23,6 +23,8 @@
 		8B2EB2E51785B1DB009851B1 /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2EB2E41785B1DB009851B1 /* PlayingCard.m */; };
 		8B2EB2EB1785B30B009851B1 /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2EB2EA1785B30B009851B1 /* PlayingCardDeck.m */; };
 		8B2EB2EE1785BA26009851B1 /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2EB2ED1785BA26009851B1 /* CardMatchingGame.m */; };
+		8B2EB2F01785C108009851B1 /* blueCardBack.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B2EB2EF1785C108009851B1 /* blueCardBack.jpg */; };
+		8B2EB2F21785C112009851B1 /* redCardBack.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B2EB2F11785C112009851B1 /* redCardBack.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		8B2EB2EA1785B30B009851B1 /* PlayingCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCardDeck.m; path = Model/PlayingCardDeck.m; sourceTree = "<group>"; };
 		8B2EB2EC1785BA26009851B1 /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = "<group>"; };
 		8B2EB2ED1785BA26009851B1 /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = "<group>"; };
+		8B2EB2EF1785C108009851B1 /* blueCardBack.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blueCardBack.jpg; sourceTree = "<group>"; };
+		8B2EB2F11785C112009851B1 /* redCardBack.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redCardBack.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,8 @@
 		8B2EB2C01785A604009851B1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8B2EB2F11785C112009851B1 /* redCardBack.jpg */,
+				8B2EB2EF1785C108009851B1 /* blueCardBack.jpg */,
 				8B2EB2C81785A604009851B1 /* CardGameAppDelegate.h */,
 				8B2EB2C91785A604009851B1 /* CardGameAppDelegate.m */,
 				8B2EB2C11785A604009851B1 /* Matchismo-Info.plist */,
@@ -126,8 +132,6 @@
 		8B2EB2DF1785B19C009851B1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8B2EB2EC1785BA26009851B1 /* CardMatchingGame.h */,
-				8B2EB2ED1785BA26009851B1 /* CardMatchingGame.m */,
 				8B2EB2DC1785B196009851B1 /* Card.h */,
 				8B2EB2DD1785B196009851B1 /* Card.m */,
 				8B2EB2E01785B1B8009851B1 /* Deck.h */,
@@ -136,6 +140,8 @@
 				8B2EB2E41785B1DB009851B1 /* PlayingCard.m */,
 				8B2EB2E91785B30B009851B1 /* PlayingCardDeck.h */,
 				8B2EB2EA1785B30B009851B1 /* PlayingCardDeck.m */,
+				8B2EB2EC1785BA26009851B1 /* CardMatchingGame.h */,
+				8B2EB2ED1785BA26009851B1 /* CardMatchingGame.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -197,6 +203,8 @@
 				8B2EB2CE1785A604009851B1 /* Default@2x.png in Resources */,
 				8B2EB2D01785A604009851B1 /* Default-568h@2x.png in Resources */,
 				8B2EB2D31785A604009851B1 /* MainStoryboard.storyboard in Resources */,
+				8B2EB2F01785C108009851B1 /* blueCardBack.jpg in Resources */,
+				8B2EB2F21785C112009851B1 /* redCardBack.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
