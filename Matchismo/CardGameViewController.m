@@ -37,7 +37,7 @@
     [self updateUI];
 }
 
-#define CARD_BACK_INSET 6
+#define CARD_BACK_INSET 5
 
 - (void)updateUI
 {
