@@ -9,6 +9,7 @@
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
+#import "GameResult.h"
 
 @interface CardGameViewController () <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
@@ -20,9 +21,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *gameModeControl;
 @property (weak, nonatomic) IBOutlet UISlider *historySlider;
+@property (strong, nonatomic) GameResult *gameResult;
 @end
 
 @implementation CardGameViewController
+
+- (GameResult *)gameResult
+{
+    if (!_gameResult) _gameResult = [[GameResult alloc] init];
+    return _gameResult;
+}
 
 - (CardMatchingGame *)game
 {
@@ -71,6 +79,7 @@
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
     [self updateUI];
+    self.gameResult.score = self.game.score;
 }
 
 - (void)setFlipCount:(int)flipCount
@@ -91,16 +100,17 @@
     // start a new game
     if (buttonIndex == 1) {
         self.game = nil;
+        self.gameResult = nil;
         self.flipCount = 0;
-        [self setGameMode:self.gameModeControl];
+        //[self setGameMode:self.gameModeControl];
         [self updateUI];
     }
 }
 
-- (IBAction)setGameMode:(UISegmentedControl *)sender
-{
-    NSUInteger mode = [sender selectedSegmentIndex];
-    self.game.numberOfCards = (mode == 0) ? 2 : 3;
-}
+//- (IBAction)setGameMode:(UISegmentedControl *)sender
+//{
+//    NSUInteger mode = [sender selectedSegmentIndex];
+//    self.game.numberOfCards = (mode == 0) ? 2 : 3;
+//}
 
 @end
