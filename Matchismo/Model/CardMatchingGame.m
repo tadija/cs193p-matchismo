@@ -11,6 +11,7 @@
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards;
 @property (nonatomic) int score;
+@property (nonatomic) NSUInteger matchCount;
 @property (nonatomic) NSMutableString *flipInfo;
 @property (nonatomic, readwrite) NSMutableArray *allFlipsInfo;
 @end
@@ -35,13 +36,7 @@
     return _cards;
 }
 
-- (NSUInteger)numberOfCards
-{
-    if (!_numberOfCards) _numberOfCards = 2;
-    return _numberOfCards;
-}
-
-- (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
+- (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck andMatchCount:(NSUInteger)matchCount
 {
     self = [super init];
     
@@ -55,6 +50,7 @@
                 self.cards[i] = card;
             }
         }
+        self.matchCount = matchCount;
     }
     
     return self;
@@ -90,27 +86,28 @@
                 // if there is one
             } else if ([otherCards count] == 1) {
                 Card *otherCard = [otherCards lastObject];
-                int matchScore = [card match:otherCards];
-                if (matchScore) {
-                    // do stuff for 2-card match game
-                    if (self.numberOfCards == 2) {
+                // do stuff for 2-card match game
+                if (self.matchCount == 2) {
+                    int matchScore = [card match:otherCards];
+                    if (matchScore) {
                         otherCard.unplayable = YES;
                         card.unplayable = YES;
                         self.score += matchScore * MATCH_BONUS;
                         self.flipInfo = [NSString stringWithFormat:@"Matched %@ and %@ for %d points!", card.contents, otherCard.contents, matchScore * MATCH_BONUS];
-                        // do stuff for 3-card match game
-                    } else if (self.numberOfCards == 3) {
-                        self.flipInfo = [NSString stringWithFormat:@"Matched %@ and %@ for now...", card.contents, otherCard.contents];
-                    }
                     // do stuff for miss match
-                } else {
-                    otherCard.faceUp = NO;
-                    self.score -= MISMATCH_PENALTY;
-                    self.flipInfo = [NSString stringWithFormat:@"%@ and %@ don't match! %d point penalty!", card.contents, otherCard.contents, MISMATCH_PENALTY];
+                    } else {
+                        otherCard.faceUp = NO;
+                        self.score -= MISMATCH_PENALTY;
+                        self.flipInfo = [NSString stringWithFormat:@"%@ and %@ don't match! %d point penalty!", card.contents, otherCard.contents, MISMATCH_PENALTY];
+                    }
+                }
+                // do stuff for 3-card match game
+                else if (self.matchCount == 3) {
+                    self.flipInfo = [NSString stringWithFormat:@"Flipped up %@", card.contents];
                 }
             }
             // if there is two other cards (this is only for 3-card match game)
-            else if ([otherCards count] == 2 && self.numberOfCards == 3) {
+            else if ([otherCards count] == 2 && self.matchCount == 3) {
                 Card *otherCard1 = otherCards[0];
                 Card *otherCard2 = otherCards[1];
                 int matchScore = [card match:otherCards];

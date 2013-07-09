@@ -13,15 +13,14 @@
 
 // designated initializer
 - (id)initWithCardCount:(NSUInteger)count
-              usingDeck:(Deck *)deck;
+              usingDeck:(Deck *)deck
+          andMatchCount:(NSUInteger)matchCount;
 
 - (void)flipCardAtIndex:(NSUInteger)index;
 
 - (Card *)cardAtIndex:(NSUInteger)index;
 
 @property (nonatomic, readonly) int score;
-
-@property (nonatomic) NSUInteger numberOfCards;
 
 @property (nonatomic, readonly) NSMutableArray *allFlipsInfo;
 

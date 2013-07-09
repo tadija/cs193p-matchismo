@@ -35,7 +35,8 @@
 - (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count
-                                                          usingDeck:[[PlayingCardDeck alloc] init]];
+                                                          usingDeck:[[PlayingCardDeck alloc] init]
+                                                      andMatchCount:2];
     return _game;
 }
 
@@ -106,11 +107,5 @@
         [self updateUI];
     }
 }
-
-//- (IBAction)setGameMode:(UISegmentedControl *)sender
-//{
-//    NSUInteger mode = [sender selectedSegmentIndex];
-//    self.game.numberOfCards = (mode == 0) ? 2 : 3;
-//}
 
 @end
