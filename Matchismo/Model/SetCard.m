@@ -55,7 +55,7 @@
         
         // check for set on all properties
         if ([self checkForSet:numbers] && [self checkForSet:symbols] && [self checkForSet:shadings] && [self checkForSet:colors]) {
-            score = 12;
+            score = 8;
         }
         
     }

@@ -18,18 +18,6 @@
 
 @implementation CardMatchingGame
 
-- (NSMutableArray *)allFlipsInfo
-{
-    if (!_allFlipsInfo) _allFlipsInfo = [[NSMutableArray alloc] initWithObjects:@"Flip up any card!", nil];
-    return _allFlipsInfo;
-}
-
-- (NSString *)flipInfo
-{
-    if (!_flipInfo) _flipInfo = [[NSMutableString alloc] init];
-    return _flipInfo;
-}
-
 - (NSMutableArray *)cards
 {
     if (!_cards) _cards = [[NSMutableArray alloc] init];
@@ -54,6 +42,18 @@
     }
     
     return self;
+}
+
+- (NSString *)flipInfo
+{
+    if (!_flipInfo) _flipInfo = [[NSMutableString alloc] init];
+    return _flipInfo;
+}
+
+- (NSMutableArray *)allFlipsInfo
+{
+    if (!_allFlipsInfo) _allFlipsInfo = [[NSMutableArray alloc] initWithObjects:@"Flip up any card!", nil];
+    return _allFlipsInfo;
 }
 
 #define FLIP_COST 1
@@ -82,7 +82,7 @@
             // if there aren't any other cards take flip cost and show info
             if ([otherCards count] == 0) {
                 self.score -= FLIP_COST;
-                self.flipInfo = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+                self.flipInfo = [NSString stringWithFormat:@"Flipped up {%@}", card.contents];
                 // if there is one
             } else if ([otherCards count] == 1) {
                 Card *otherCard = [otherCards lastObject];
@@ -93,17 +93,18 @@
                         otherCard.unplayable = YES;
                         card.unplayable = YES;
                         self.score += matchScore * MATCH_BONUS;
-                        self.flipInfo = [NSString stringWithFormat:@"Matched %@ and %@ for %d points!", card.contents, otherCard.contents, matchScore * MATCH_BONUS];
+                        self.flipInfo = [NSString stringWithFormat:@"Matched {%@} and {%@} for %d points!", card.contents, otherCard.contents, matchScore * MATCH_BONUS];
                     // do stuff for miss match
                     } else {
                         otherCard.faceUp = NO;
                         self.score -= MISMATCH_PENALTY;
-                        self.flipInfo = [NSString stringWithFormat:@"%@ and %@ don't match! %d point penalty!", card.contents, otherCard.contents, MISMATCH_PENALTY];
+                        self.flipInfo = [NSString stringWithFormat:@"{%@} and {%@} don't match! (-%d penalty)", card.contents, otherCard.contents, MISMATCH_PENALTY];
                     }
                 }
                 // do stuff for 3-card match game
                 else if (self.matchCount == 3) {
-                    self.flipInfo = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+                    self.score -= FLIP_COST;                    
+                    self.flipInfo = [NSString stringWithFormat:@"Flipped up {%@}", card.contents];
                 }
             }
             // if there is two other cards (this is only for 3-card match game)
@@ -116,22 +117,23 @@
                     otherCard2.unplayable = YES;
                     card.unplayable = YES;
                     self.score += matchScore * MATCH_THREE_BONUS;
-                    self.flipInfo = [NSString stringWithFormat:@"Matched %@ %@ %@ for %d points!", card.contents, otherCard1.contents, otherCard2.contents, matchScore * MATCH_THREE_BONUS];
+                    self.flipInfo = [NSString stringWithFormat:@"Matched {%@} {%@} {%@} for %d points!", card.contents, otherCard1.contents, otherCard2.contents, matchScore * MATCH_THREE_BONUS];
                 } else {
                     otherCard1.faceUp = NO;
                     otherCard2.faceUp = NO;
+                    card.faceUp = NO; // check this
                     self.score -= MISMATCH_PENALTY;
-                    self.flipInfo = [NSString stringWithFormat:@"%@ %@ %@ don't match! %d point penalty!", card.contents, otherCard1.contents, otherCard2.contents, MISMATCH_PENALTY];
+                    self.flipInfo = [NSString stringWithFormat:@"{%@} {%@} {%@} don't match! (-%d penalty)", card.contents, otherCard1.contents, otherCard2.contents, MISMATCH_PENALTY];
                 }
             }
         }
         else { // if it's a flip down
-            self.flipInfo = [NSString stringWithFormat:@"Flipped down %@", card.contents];
+            self.flipInfo = [NSString stringWithFormat:@"Flipped down {%@}", card.contents];
         }
-        // in any case flip card
-        card.faceUp = !card.isFaceUp;
         // and add flip info to allFlipsInfo
         [self.allFlipsInfo addObject:self.flipInfo];
+        // in any case flip card
+        card.faceUp = !card.isFaceUp;
     }
 }
 
