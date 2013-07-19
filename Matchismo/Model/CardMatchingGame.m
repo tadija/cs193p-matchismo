@@ -24,7 +24,7 @@
     return _cards;
 }
 
-- (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck andMatchCount:(NSUInteger)matchCount
+- (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck andMatchCount:(NSUInteger)matchCount withSettings:(Settings *)settings
 {
     self = [super init];
     
@@ -39,6 +39,7 @@
             }
         }
         self.matchCount = matchCount;
+        self.settings = settings;
     }
     
     return self;
@@ -56,11 +57,6 @@
     return _allFlipsInfo;
 }
 
-#define FLIP_COST 1
-#define MISMATCH_PENALTY 2
-#define MATCH_BONUS 4
-#define MATCH_THREE_BONUS 6
-
 - (Card *)cardAtIndex:(NSUInteger)index
 {
     return (index < [self.cards count]) ? self.cards[index] : nil;
@@ -76,12 +72,17 @@
             NSMutableArray *otherCards = [[NSMutableArray alloc] init];
             for (Card *otherCard in self.cards) {
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
-                    [otherCards addObject:otherCard];
+                    if (otherCard.isPenalty) {
+                        otherCard.faceUp = NO;
+                        otherCard.penalty = NO;
+                    } else {
+                        [otherCards addObject:otherCard];
+                    }
                 }
             }
             // if there aren't any other cards take flip cost and show info
             if ([otherCards count] == 0) {
-                self.score -= FLIP_COST;
+                self.score -= self.settings.flipCost;
                 self.flipInfo = [NSString stringWithFormat:@"Flipped up {%@}", card.contents];
                 // if there is one
             } else if ([otherCards count] == 1) {
@@ -92,18 +93,19 @@
                     if (matchScore) {
                         otherCard.unplayable = YES;
                         card.unplayable = YES;
-                        self.score += matchScore * MATCH_BONUS;
-                        self.flipInfo = [NSString stringWithFormat:@"Matched {%@} and {%@} for %d points!", card.contents, otherCard.contents, matchScore * MATCH_BONUS];
+                        self.score += matchScore * self.settings.matchBonus;
+                        self.flipInfo = [NSString stringWithFormat:@"Matched {%@} and {%@} for %d points!", card.contents, otherCard.contents, matchScore * self.settings.matchBonus];
                     // do stuff for miss match
                     } else {
-                        otherCard.faceUp = NO;
-                        self.score -= MISMATCH_PENALTY;
-                        self.flipInfo = [NSString stringWithFormat:@"{%@} and {%@} don't match! (-%d penalty)", card.contents, otherCard.contents, MISMATCH_PENALTY];
+                        otherCard.penalty = YES;
+                        card.penalty = YES;
+                        self.score -= self.settings.mismatchPenalty;
+                        self.flipInfo = [NSString stringWithFormat:@"{%@} and {%@} don't match! (-%d penalty)", card.contents, otherCard.contents, self.settings.mismatchPenalty];
                     }
                 }
                 // do stuff for 3-card match game
                 else if (self.matchCount == 3) {
-                    self.score -= FLIP_COST;                    
+                    self.score -= self.settings.flipCost;
                     self.flipInfo = [NSString stringWithFormat:@"Flipped up {%@}", card.contents];
                 }
             }
@@ -116,14 +118,14 @@
                     otherCard1.unplayable = YES;
                     otherCard2.unplayable = YES;
                     card.unplayable = YES;
-                    self.score += matchScore * MATCH_THREE_BONUS;
-                    self.flipInfo = [NSString stringWithFormat:@"Matched {%@} {%@} {%@} for %d points!", card.contents, otherCard1.contents, otherCard2.contents, matchScore * MATCH_THREE_BONUS];
+                    self.score += matchScore * self.settings.setBonus;
+                    self.flipInfo = [NSString stringWithFormat:@"Matched {%@} {%@} {%@} for %d points!", card.contents, otherCard1.contents, otherCard2.contents, matchScore * self.settings.setBonus];
                 } else {
-                    otherCard1.faceUp = NO;
-                    otherCard2.faceUp = NO;
-                    card.faceUp = NO; // check this
-                    self.score -= MISMATCH_PENALTY;
-                    self.flipInfo = [NSString stringWithFormat:@"{%@} {%@} {%@} don't match! (-%d penalty)", card.contents, otherCard1.contents, otherCard2.contents, MISMATCH_PENALTY];
+                    otherCard1.penalty = YES;
+                    otherCard2.penalty = YES;
+                    card.penalty = YES;
+                    self.score -= self.settings.mismatchPenalty;
+                    self.flipInfo = [NSString stringWithFormat:@"{%@} {%@} {%@} don't match! (-%d penalty)", card.contents, otherCard1.contents, otherCard2.contents, self.settings.mismatchPenalty];
                 }
             }
         }

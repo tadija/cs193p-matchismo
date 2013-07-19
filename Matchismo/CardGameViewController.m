@@ -9,7 +9,6 @@
 #import "CardGameViewController.h"
 #import "CardMatchingGame.h"
 #import "GameResult.h"
-#import "PlayingCardDeck.h"
 
 @interface CardGameViewController () <UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
@@ -33,6 +32,8 @@
 - (GameResult *)gameResult
 {
     if (!_gameResult) _gameResult = [[GameResult alloc] init];
+    _gameResult.game = self.game.settings.gameDescription;
+    _gameResult.difficulty = self.game.settings.difficulty;
     return _gameResult;
 }
 

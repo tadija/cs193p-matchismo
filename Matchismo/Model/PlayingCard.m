@@ -10,6 +10,9 @@
 
 @implementation PlayingCard
 
+#define MATCH_SUIT_SCORE 1
+#define MATCH_RANK_SCORE 4
+
 - (int)match:(NSArray *)otherCards
 {
     int score = 0;
@@ -26,9 +29,9 @@
     // add score for each PlayingCard
     for (PlayingCard *otherPlayingCard in otherPlayingCards) {
         if ([otherPlayingCard.suit isEqualToString:self.suit]) {
-            score += 1;
+            score += MATCH_SUIT_SCORE;
         } else if (otherPlayingCard.rank == self.rank) {
-            score += 4;
+            score += MATCH_RANK_SCORE;
         } else {
             score = 0;
         }

@@ -2,14 +2,14 @@
 //  SetCardGameViewController.m
 //  Matchismo
 //
-//  Created by Marko Tadić on 9.7.13..
+//  Created by Marko Tadić on 9/7/13.
 //  Copyright (c) 2013. tadija. All rights reserved.
 //
 
 #import "SetCardGameViewController.h"
 #import "CardMatchingGame.h"
 #import "SetCardDeck.h"
-#import "SetCard.h"
+#import "SettingsViewController.h"
 
 @interface SetCardGameViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
@@ -22,7 +22,8 @@
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count
                                                           usingDeck:[[SetCardDeck alloc] init]
-                                                      andMatchCount:3];
+                                                      andMatchCount:3
+                                                       withSettings:[[Settings alloc] initGame:@"Set" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
     return _game;
 }
 
@@ -35,7 +36,11 @@
         cardButton.hidden = card.isUnplayable;
         
         if (cardButton.selected) {
-            [cardButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1]];
+            if (card.isPenalty) {
+                [cardButton setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.1]];
+            } else {
+                [cardButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1]];
+            }
         } else {
             [cardButton setBackgroundColor:[UIColor whiteColor]];
         }

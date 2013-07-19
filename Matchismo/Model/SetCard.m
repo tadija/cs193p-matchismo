@@ -2,7 +2,7 @@
 //  SetCard.m
 //  Matchismo
 //
-//  Created by Marko Tadić on 8.7.13..
+//  Created by Marko Tadić on 8/7/13.
 //  Copyright (c) 2013. tadija. All rights reserved.
 //
 
@@ -28,6 +28,8 @@
     
     return isSet;
 }
+
+#define SET_SCORE 6
 
 - (int)match:(NSArray *)otherCards
 {
@@ -55,7 +57,7 @@
         
         // check for set on all properties
         if ([self checkForSet:numbers] && [self checkForSet:symbols] && [self checkForSet:shadings] && [self checkForSet:colors]) {
-            score = 8;
+            score = SET_SCORE;
         }
         
     }

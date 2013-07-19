@@ -9,6 +9,7 @@
 #import "PlayingCardGameViewController.h"
 #import "CardMatchingGame.h"
 #import "PlayingCardDeck.h"
+#import "SettingsViewController.h"
 
 @interface PlayingCardGameViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
@@ -21,11 +22,12 @@
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count
                                                           usingDeck:[[PlayingCardDeck alloc] init]
-                                                      andMatchCount:2];
+                                                      andMatchCount:2
+                                                       withSettings:[[Settings alloc] initGame:@"Match" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
     return _game;
 }
 
-#define CARD_BACK_INSET 5
+#define CARD_BACK_INSET 6
 
 - (void)updateCardsUI
 {

@@ -23,8 +23,10 @@
     [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     for (GameResult *result in [[GameResult allGameResults] sortedArrayUsingSelector:self.sortSelector]) { // sorted
-        displayText = [displayText stringByAppendingFormat:@"Score: %d (%@, %0g)\n", result.score, [formatter stringFromDate:result.end], round(result.duration)];  // formatted date
+        displayText = [displayText stringByAppendingFormat:@"Date: %@ | Duration: %0g\nGame: %@ | Score: %d | Difficulty: %@\n\n",
+                       [formatter stringFromDate:result.end], round(result.duration), result.game, result.score, result.difficulty];
     }
+    self.display.textColor = [UIColor whiteColor];
     self.display.text = displayText;
 }
 
@@ -43,7 +45,7 @@
 // return default sort selector if none set (by score)
 - (SEL)sortSelector
 {
-    if (!_sortSelector) _sortSelector = @selector(compareScoreToGameResult:);
+    if (!_sortSelector) _sortSelector = @selector(compareEndDateToGameResult:);
     return _sortSelector;
 }
 
@@ -54,20 +56,18 @@
     [self updateUI];
 }
 
-- (IBAction)sortByDate
+- (IBAction)changeSorting:(UISegmentedControl *)sender
 {
-    self.sortSelector = @selector(compareEndDateToGameResult:);
+    NSInteger idx = [sender selectedSegmentIndex];
+    if (idx == 0) {
+        self.sortSelector = @selector(compareEndDateToGameResult:);
+    } else if (idx == 1) {
+        self.sortSelector = @selector(compareScoreToGameResult:);
+    } else if (idx == 2) {
+        self.sortSelector = @selector(compareDurationToGameResult:);
+    }
 }
 
-- (IBAction)sortByScore
-{
-    self.sortSelector = @selector(compareScoreToGameResult:);
-}
-
-- (IBAction)sortByDuration
-{
-    self.sortSelector = @selector(compareDurationToGameResult:);
-}
 
 #pragma mark - (Unused) Initialization before viewDidLoad
 
