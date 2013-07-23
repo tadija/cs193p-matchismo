@@ -16,4 +16,7 @@
 - (void)updateCardsUI; // abstract
 - (NSAttributedString *)parseFlipInfoFromString:(NSString *)info; // abstract
 
+@property (readonly, nonatomic) NSUInteger startingCardCount; // abstract
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card; // abstract
+
 @end
