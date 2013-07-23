@@ -317,7 +317,6 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Match" image="match.png" id="fCf-b6-U7A"/>
                     <connections>
-                        <outlet property="dealButton" destination="SJ4-vW-A9Z" id="enT-nl-gs6"/>
                         <outlet property="flipsLabel" destination="ImG-eb-cnO" id="L0V-WB-kQ0"/>
                         <outlet property="historySlider" destination="v6x-qI-dbZ" id="NGZ-KR-69a"/>
                         <outlet property="lastFlipInfoLabel" destination="hu0-OK-NoS" id="jfw-df-NCW"/>
@@ -973,7 +972,6 @@ Game: Set | Score: 25 | Difficulty: normal</string>
                     </view>
                     <tabBarItem key="tabBarItem" title="Set" image="set.png" id="N43-Iz-2rU"/>
                     <connections>
-                        <outlet property="dealButton" destination="CK3-gF-exb" id="MBk-1f-T7q"/>
                         <outlet property="flipsLabel" destination="qjJ-0K-WDd" id="fKv-FR-C58"/>
                         <outlet property="historySlider" destination="wKK-J8-Qpl" id="GE3-YT-zbp"/>
                         <outlet property="lastFlipInfoLabel" destination="sP6-Zk-Pjh" id="l5x-iy-Lws"/>
@@ -1023,7 +1021,6 @@ Game: Set | Score: 25 | Difficulty: normal</string>
                 <relationship kind="action" name="dealNewCards:"/>
                 <relationship kind="action" name="flipCard:" candidateClass="UIButton"/>
                 <relationship kind="action" name="historySlide:" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="dealButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="flipsLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="historySlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="lastFlipInfoLabel" candidateClass="UILabel"/>
@@ -1053,6 +1050,7 @@ Game: Set | Score: 25 | Difficulty: normal</string>
         <class className="SettingsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
             <relationships>
+                <relationship kind="action" name="changeDifficulty:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="difficultyPicker" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="flipLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="matchLabel" candidateClass="UILabel"/>

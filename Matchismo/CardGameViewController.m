@@ -7,13 +7,10 @@
 //
 
 #import "CardGameViewController.h"
-#import "CardMatchingGame.h"
 #import "GameResult.h"
 
 @interface CardGameViewController () <UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (weak, nonatomic) IBOutlet UIButton *dealButton;
-@property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) GameResult *gameResult;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (nonatomic) int flipCount;
@@ -24,10 +21,7 @@
 
 @implementation CardGameViewController
 
-- (void)viewDidLoad
-{
-    [self updateUI];
-}
+#pragma mark - Properties
 
 - (GameResult *)gameResult
 {
@@ -37,9 +31,22 @@
     return _gameResult;
 }
 
+- (void)setFlipCount:(int)flipCount
+{
+    _flipCount = flipCount;
+    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
+}
+
 - (void)setCardButtons:(NSArray *)cardButtons
 {
     _cardButtons = cardButtons;
+    [self updateUI];
+}
+
+#pragma mark - Updating the UI
+
+- (void)viewDidLoad
+{
     [self updateUI];
 }
 
@@ -56,8 +63,12 @@
 
 - (void)updateCardsUI
 {
-    // implement in subclass (different for each game)
+    // abstract
 }
+
+- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info { return nil; } // abstract
+
+#define pragma mark - Target/Action/Gestures
 
 - (IBAction)historySlide:(UISlider *)sender
 {
@@ -66,24 +77,12 @@
     self.lastFlipInfoLabel.alpha = (sender.value < sender.maximumValue ? 0.5 : 1.0);
 }
 
-- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info
-{
-    // do proper parsing in subclass
-    return [[NSAttributedString alloc] initWithString:info];
-}
-
 - (IBAction)flipCard:(UIButton *)sender
 {
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
     self.gameResult.score = self.game.score;
     [self updateUI];
-}
-
-- (void)setFlipCount:(int)flipCount
-{
-    _flipCount = flipCount;
-    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
 }
 
 - (IBAction)dealNewCards:(id)sender

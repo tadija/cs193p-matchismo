@@ -7,16 +7,16 @@
 //
 
 #import "SetCardGameViewController.h"
-#import "CardMatchingGame.h"
 #import "SetCardDeck.h"
 #import "SettingsViewController.h"
 
 @interface SetCardGameViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (strong, nonatomic) CardMatchingGame *game;
 @end
 
 @implementation SetCardGameViewController
+
+@synthesize game = _game;
 
 - (CardMatchingGame *)game
 {
@@ -76,6 +76,8 @@
     [attributedInfo addAttribute:NSParagraphStyleAttributeName value:attributedStyle range:NSMakeRange(0, [attributedInfo length])];
     return attributedInfo;
 }
+
+#pragma mark Helper methods
 
 - (NSAttributedString *)cardContentsWithString:(NSString *)string
 {

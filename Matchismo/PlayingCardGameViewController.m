@@ -7,16 +7,16 @@
 //
 
 #import "PlayingCardGameViewController.h"
-#import "CardMatchingGame.h"
 #import "PlayingCardDeck.h"
 #import "SettingsViewController.h"
 
 @interface PlayingCardGameViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
-@property (strong, nonatomic) CardMatchingGame *game;
 @end
 
 @implementation PlayingCardGameViewController
+
+@synthesize game = _game;
 
 - (CardMatchingGame *)game
 {

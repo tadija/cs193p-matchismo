@@ -138,10 +138,7 @@
 			children = (
 				8B2EB2DF1785B19C009851B1 /* Model */,
 				8B2EB2D11785A604009851B1 /* MainStoryboard.storyboard */,
-				8B2EB2F61786ECAC009851B1 /* GameResult.h */,
-				8B2EB2F71786ECAC009851B1 /* GameResult.m */,
-				8B2EB2F31786EAB3009851B1 /* GameResultViewController.h */,
-				8B2EB2F41786EAB3009851B1 /* GameResultViewController.m */,
+				8B7AB373179EBA47002232BE /* GameResult */,
 				8BE19A971797123F00A4CE0D /* SettingsViewController.h */,
 				8BE19A981797123F00A4CE0D /* SettingsViewController.m */,
 				8B2EB2D41785A604009851B1 /* CardGameViewController.h */,
@@ -199,6 +196,17 @@
 				8BE19A951796E63B00A4CE0D /* Settings.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		8B7AB373179EBA47002232BE /* GameResult */ = {
+			isa = PBXGroup;
+			children = (
+				8B2EB2F61786ECAC009851B1 /* GameResult.h */,
+				8B2EB2F71786ECAC009851B1 /* GameResult.m */,
+				8B2EB2F31786EAB3009851B1 /* GameResultViewController.h */,
+				8B2EB2F41786EAB3009851B1 /* GameResultViewController.m */,
+			);
+			name = GameResult;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
