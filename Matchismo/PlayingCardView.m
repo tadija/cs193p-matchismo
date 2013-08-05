@@ -44,12 +44,6 @@
     [self setNeedsDisplay];
 }
 
-- (void)setFaceUp:(BOOL)faceUp
-{
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
-}
-
 - (NSString *)rankAsString
 {
     return @[@"?",@"A",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"J",@"Q",@"K"][self.rank];
@@ -68,7 +62,7 @@
     [[UIColor whiteColor] setFill];
     UIRectFill(self.bounds);
     
-    if (self.faceUp) {
+    if (self.isFaceUp) {
         UIImage *faceImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@%@.jpg", [self rankAsString], self.suit]];
         if (faceImage) {
             CGRect imageRect = CGRectInset(self.bounds,
@@ -205,25 +199,6 @@
                             verticalOffset:voffset
                                 upsideDown:YES];
     }
-}
-
-#pragma mark - Initialization
-
-- (void)setup
-{
-    // do initialization here
-}
-
-- (void)awakeFromNib
-{
-    [self setup];
-}
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    [self setup];
-    return self;
 }
 
 @end

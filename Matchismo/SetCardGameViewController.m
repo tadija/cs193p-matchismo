@@ -9,9 +9,11 @@
 #import "SetCardGameViewController.h"
 #import "SetCardDeck.h"
 #import "SettingsViewController.h"
+#import "SetCard.h"
+#import "SetCardCollectionViewCell.h"
 
-@interface SetCardGameViewController ()
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@interface SetCardGameViewController()
+@property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @end
 
 @implementation SetCardGameViewController
@@ -20,35 +22,68 @@
 
 - (CardMatchingGame *)game
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count
+    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:12
                                                           usingDeck:[[SetCardDeck alloc] init]
                                                       andMatchCount:3
                                                        withSettings:[[Settings alloc] initGame:@"Set" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
     return _game;
 }
 
-- (void)updateCardsUI
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
 {
-    for (UIButton *cardButton in self.cardButtons) {
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
-        cardButton.selected = card.isFaceUp;
-        cardButton.enabled = !card.isUnplayable;
-        cardButton.hidden = card.isUnplayable;
-        
-        if (cardButton.selected) {
-            if (card.isPenalty) {
-                [cardButton setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.1]];
-            } else {
-                [cardButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1]];
-            }
-        } else {
-            [cardButton setBackgroundColor:[UIColor whiteColor]];
+    if ([cell isKindOfClass:[SetCardCollectionViewCell class]]) {
+        SetCardView *setCardView = ((SetCardCollectionViewCell *)cell).setCardView;
+        if ([card isKindOfClass:[SetCard class]]) {
+            SetCard *setCard = (SetCard *)card;
+            setCardView.number = setCard.number;
+            setCardView.symbol = setCard.symbol;
+            setCardView.shading = setCard.shading;
+            setCardView.color = setCard.color;
+            setCardView.faceUp = setCard.isFaceUp;
+            setCardView.penalty = setCard.isPenalty;
         }
-        
-        NSAttributedString *cardContents = [self cardContentsWithString:card.contents];
-        [cardButton setAttributedTitle:cardContents forState:UIControlStateNormal];
-        [cardButton setAttributedTitle:cardContents forState:UIControlStateSelected];
     }
+}
+
+- (void)updateCellsWithIndexPaths:(NSMutableArray *)indexPaths
+{    
+    NSMutableIndexSet *unplayableCardIndexes = [[NSMutableIndexSet alloc] init];
+    for (NSIndexPath *indexPath in indexPaths)
+    {
+        [unplayableCardIndexes addIndex:indexPath.item];
+    }
+    
+    [self.cardCollectionView performBatchUpdates:^{
+        [self.game deleteCardsAtIndexes:unplayableCardIndexes];
+        [self.cardCollectionView deleteItemsAtIndexPaths:indexPaths];
+    } completion:nil];
+}
+
+- (void)updateCustomUI
+{
+    if (!self.game.cardsInDeck) {
+        self.dealButton.enabled = NO;
+        self.dealButton.alpha = 0.3;
+    }
+}
+
+#define DEAL_CARDS_COUNT 3
+- (IBAction)dealMoreCards:(UIButton *)sender
+{
+    NSIndexSet *newCardIndexes = [self.game dealCards:DEAL_CARDS_COUNT];
+    NSMutableArray *newCardIndexPaths = [[NSMutableArray alloc] init];
+    
+    [newCardIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [newCardIndexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+    }];
+    
+    [self.cardCollectionView performBatchUpdates:^{
+        [self.cardCollectionView insertItemsAtIndexPaths:newCardIndexPaths];
+    } completion:^(BOOL finished) {
+        [self.cardCollectionView scrollToItemAtIndexPath:[newCardIndexPaths lastObject] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+    }];
+    
+    [self updateCustomUI];
 }
 
 - (NSAttributedString *)parseFlipInfoFromString:(NSString *)info

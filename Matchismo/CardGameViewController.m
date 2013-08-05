@@ -16,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastFlipInfoLabel;
 @property (weak, nonatomic) IBOutlet UISlider *historySlider;
-@property (weak, nonatomic) IBOutlet UICollectionView *cardCollectionView;
+
 @end
 
 @implementation CardGameViewController
@@ -30,20 +30,16 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.startingCardCount;
+    return self.game.cardsInGame;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingCard" forIndexPath:indexPath];
+    NSString *reuseIdentifier = [NSString stringWithFormat:@"%@Card", self.game.settings.gameDescription];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     Card *card = [self.game cardAtIndex:indexPath.item];
     [self updateCell:cell usingCard:card];
     return cell;
-}
-
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
-{
-    // abstract
 }
 
 #pragma mark - Properties
@@ -69,28 +65,61 @@
     [self updateUI];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self updateUI];
+}
+
 - (void)updateUI
 {
+    NSMutableArray *unplayableCardIndexPaths = [[NSMutableArray alloc] init];
+    
     for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
         NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
         Card *card = [self.game cardAtIndex:indexPath.item];
+        if (card.isUnplayable) {
+            [unplayableCardIndexPaths addObject:indexPath];
+        }
         [self updateCell:cell usingCard:card];
     }
+    
+    if ([unplayableCardIndexPaths count]) {
+        [self updateCellsWithIndexPaths:unplayableCardIndexPaths];
+    }
+    
+    [self updateCustomUI];
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
     // set history slider (which sets lastFlipInfoLabel)
     self.historySlider.maximumValue = [self.game.allFlipsInfo count] - 1;
     self.historySlider.value = [self.game.allFlipsInfo count] - 1;
-    [self historySlide:self.historySlider];
+    //[self historySlide:self.historySlider];
 }
 
-- (void)updateCardsUI
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
 {
     // abstract
+    @throw [NSException exceptionWithName:@"updateCell usingCard" reason:@"Method not implemented (abstract)" userInfo:nil];
 }
 
-- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info { return nil; } // abstract
+- (void)updateCellsWithIndexPaths:(NSMutableArray *)indexPaths
+{
+    // abstract
+    @throw [NSException exceptionWithName:@"updateCellsWithIndexPaths" reason:@"Method not implemented (abstract)" userInfo:nil];
+}
+
+- (void)updateCustomUI
+{
+    // abstract
+    @throw [NSException exceptionWithName:@"updateCustomUI" reason:@"Method not implemented (abstract)" userInfo:nil];
+}
+
+- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info
+{
+    // abstract
+    @throw [NSException exceptionWithName:@"parseFlipInfoFromString" reason:@"Method not implemented (abstract)" userInfo:nil];
+}
 
 #define pragma mark - Target/Action/Gestures
 
@@ -113,7 +142,7 @@
     }
 }
 
-- (IBAction)dealNewCards:(id)sender
+- (IBAction)restartGame:(id)sender
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Re-deal all cards" message:@"Do you want to start a new game?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     [alert show];
@@ -126,6 +155,7 @@
         self.game = nil;
         self.gameResult = nil;
         self.flipCount = 0;
+        [self.cardCollectionView reloadData];
         [self updateUI];
     }
 }

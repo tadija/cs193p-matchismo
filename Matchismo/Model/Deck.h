@@ -15,4 +15,6 @@
 
 - (Card *)drawRandomCard;
 
+- (NSUInteger)cardsLeft;
+
 @end

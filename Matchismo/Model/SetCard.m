@@ -50,10 +50,10 @@
         SetCard *setCard2 = otherSetCards[0];
         SetCard *setCard3 = otherSetCards[1];
         
-        NSArray *numbers = @[setCard1.number, setCard2.number, setCard3.number];
-        NSArray *symbols = @[setCard1.symbol, setCard2.symbol, setCard3.symbol];
-        NSArray *shadings = @[setCard1.shading, setCard2.shading, setCard3.shading];
-        NSArray *colors = @[setCard1.color, setCard2.color, setCard3.color];
+        NSArray *numbers = @[@(setCard1.number), @(setCard2.number), @(setCard3.number)];
+        NSArray *symbols = @[@(setCard1.symbol), @(setCard2.symbol), @(setCard3.symbol)];
+        NSArray *shadings = @[@(setCard1.shading), @(setCard2.shading), @(setCard3.shading)];
+        NSArray *colors = @[@(setCard1.color), @(setCard2.color), @(setCard3.color)];
         
         // check for set on all properties
         if ([self checkForSet:numbers] && [self checkForSet:symbols] && [self checkForSet:shadings] && [self checkForSet:colors]) {
@@ -67,7 +67,7 @@
 
 - (NSString *)contents
 {
-    return [NSString stringWithFormat:@"%@;%@;%@;%@", self.number, self.symbol, self.shading, self.color];
+    return [NSString stringWithFormat:@"%d;%d;%d;%d", self.number, self.symbol, self.shading, self.color];
 }
 
 + (NSArray *)validNumbers
@@ -75,45 +75,45 @@
     return @[@1, @2, @3];
 }
 
-- (void)setNumber:(NSNumber *)number
+- (void)setNumber:(NSUInteger)number
 {
-    if ([[SetCard validNumbers] containsObject:number]) {
+    if ([[SetCard validNumbers] containsObject:@(number)]) {
         _number = number;
     }
 }
 
 + (NSArray *)validSymbols
 {
-    return @[@"diamond", @"squiggle", @"oval"];
+    return @[@(SetCardSymbolDiamond), @(SetCardSymbolSquiggle), @(SetCardSymbolOval)];
 }
 
-- (void)setSymbol:(NSString *)symbol
+- (void)setSymbol:(SetCardSymbol)symbol
 {
-    if ([[SetCard validSymbols] containsObject:symbol]) {
+    if ([[SetCard validSymbols] containsObject:@(symbol)]) {
         _symbol = symbol;
     }
 }
 
 + (NSArray *)validShadings
 {
-    return @[@"solid", @"striped", @"open"];
+    return @[@(SetCardShadingSolid), @(SetCardShadingStriped), @(SetCardShadingOpen)];
 }
 
-- (void)setShading:(NSString *)shading
+- (void)setShading:(SetCardShading)shading
 {
-    if ([[SetCard validShadings] containsObject:shading]) {
+    if ([[SetCard validShadings] containsObject:@(shading)]) {
         _shading = shading;
     }
 }
 
 + (NSArray *)validColors
 {
-    return @[@"red", @"green", @"purple"];
+    return @[@(SetCardColorRed), @(SetCardColorGreen), @(SetCardColorPurple)];
 }
 
-- (void)setColor:(NSString *)color
+- (void)setColor:(SetCardColor)color
 {
-    if ([[SetCard validColors] containsObject:color]) {
+    if ([[SetCard validColors] containsObject:@(color)]) {
         _color = color;
     }
 }

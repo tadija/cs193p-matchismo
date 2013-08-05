@@ -10,6 +10,7 @@
 
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards;
+@property (strong, nonatomic) Deck *deck;
 @property (nonatomic) int score;
 @property (nonatomic) NSUInteger matchCount;
 @property (nonatomic) NSMutableString *flipInfo;
@@ -29,8 +30,9 @@
     self = [super init];
     
     if (self) {
+        self.deck = deck;
         for (int i = 0; i < count; i++) {
-            Card *card = [deck drawRandomCard];
+            Card *card = [self.deck drawRandomCard];
             if (!card) {
                 self = nil;
                 break;
@@ -43,6 +45,31 @@
     }
     
     return self;
+}
+
+- (NSUInteger)cardsInGame
+{
+    return [self.cards count];
+}
+
+- (NSUInteger)cardsInDeck
+{
+    return [self.deck cardsLeft];
+}
+
+- (NSIndexSet *)dealCards:(NSUInteger)numberOfCards
+{
+    NSMutableIndexSet *newCardIndexes = [[NSMutableIndexSet alloc] init];
+    
+    for (int i = 0; i < numberOfCards; i++) {
+        Card *card = [self.deck drawRandomCard];
+        if (card) {
+            [self.cards addObject:card];
+            [newCardIndexes addIndex:[self.cards indexOfObject:card]];
+        }
+    }
+    
+    return newCardIndexes;
 }
 
 - (NSString *)flipInfo
@@ -118,6 +145,7 @@
                     otherCard1.unplayable = YES;
                     otherCard2.unplayable = YES;
                     card.unplayable = YES;
+                    //[self.cards removeObjectsInArray:@[card, otherCard1, otherCard2]];
                     self.score += matchScore * self.settings.setBonus;
                     self.flipInfo = [NSString stringWithFormat:@"Matched {%@} {%@} {%@} for %d points!", card.contents, otherCard1.contents, otherCard2.contents, matchScore * self.settings.setBonus];
                 } else {
@@ -137,6 +165,11 @@
         // in any case flip card
         card.faceUp = !card.isFaceUp;
     }
+}
+
+- (void)deleteCardsAtIndexes:(NSIndexSet *)indexes
+{
+    [self.cards removeObjectsAtIndexes:indexes];
 }
 
 @end

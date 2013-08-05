@@ -18,12 +18,16 @@
           andMatchCount:(NSUInteger)matchCount
            withSettings:(Settings *)settings;
 
-- (void)flipCardAtIndex:(NSUInteger)index;
-
 - (Card *)cardAtIndex:(NSUInteger)index;
+- (void)flipCardAtIndex:(NSUInteger)index;
+- (void)deleteCardsAtIndexes:(NSIndexSet *)indexes;
+
+- (NSIndexSet *)dealCards:(NSUInteger)numberOfCards;
 
 @property (nonatomic, readonly) int score;
 @property (strong, nonatomic) Settings *settings;
+@property (nonatomic, readonly) NSUInteger cardsInGame;
+@property (nonatomic, readonly) NSUInteger cardsInDeck;
 
 @property (nonatomic, readonly) NSMutableArray *allFlipsInfo;
 

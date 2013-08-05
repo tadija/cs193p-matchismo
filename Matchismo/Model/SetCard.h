@@ -8,12 +8,30 @@
 
 #import "Card.h"
 
+typedef enum {
+    SetCardSymbolDiamond = 1,
+    SetCardSymbolSquiggle = 2,
+    SetCardSymbolOval = 3
+} SetCardSymbol;
+
+typedef enum {
+    SetCardShadingSolid = 1,
+    SetCardShadingStriped = 2,
+    SetCardShadingOpen = 3
+} SetCardShading;
+
+typedef enum {
+    SetCardColorRed = 1,
+    SetCardColorGreen = 2,
+    SetCardColorPurple = 3
+} SetCardColor;
+
 @interface SetCard : Card
 
-@property (strong, nonatomic) NSNumber *number;
-@property (strong, nonatomic) NSString *symbol;
-@property (strong, nonatomic) NSString *shading;
-@property (strong, nonatomic) NSString *color;
+@property (nonatomic) NSUInteger number;
+@property (nonatomic) SetCardSymbol symbol;
+@property (nonatomic) SetCardShading shading;
+@property (nonatomic) SetCardColor color;
 
 + (NSArray *)validNumbers;
 + (NSArray *)validSymbols;

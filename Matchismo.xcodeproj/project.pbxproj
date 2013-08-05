@@ -59,6 +59,9 @@
 		8B3D7FD6179F2D5900E8C610 /* Q♥@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7FBE179F2D5900E8C610 /* Q♥@2x.jpg */; };
 		8B3D7FD7179F2D5900E8C610 /* Q♦.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7FBF179F2D5900E8C610 /* Q♦.jpg */; };
 		8B3D7FD8179F2D5900E8C610 /* Q♦@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7FC0179F2D5900E8C610 /* Q♦@2x.jpg */; };
+		8B7AB37617A011D7002232BE /* SetCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B7AB37517A011D7002232BE /* SetCardView.m */; };
+		8B7AB37A17A01272002232BE /* SetCardCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B7AB37917A01272002232BE /* SetCardCollectionViewCell.m */; };
+		8B86394917B0620200824563 /* CardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B86394817B0620200824563 /* CardView.m */; };
 		8BD84307178B62FC000319DF /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BD84306178B62FC000319DF /* SetCard.m */; };
 		8BD8430A178C881B000319DF /* SetCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BD84309178C881B000319DF /* SetCardGameViewController.m */; };
 		8BE19A961796E63B00A4CE0D /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE19A951796E63B00A4CE0D /* Settings.m */; };
@@ -134,6 +137,12 @@
 		8B3D7FBE179F2D5900E8C610 /* Q♥@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Q♥@2x.jpg"; sourceTree = "<group>"; };
 		8B3D7FBF179F2D5900E8C610 /* Q♦.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Q♦.jpg"; sourceTree = "<group>"; };
 		8B3D7FC0179F2D5900E8C610 /* Q♦@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Q♦@2x.jpg"; sourceTree = "<group>"; };
+		8B7AB37417A011D7002232BE /* SetCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardView.h; sourceTree = "<group>"; };
+		8B7AB37517A011D7002232BE /* SetCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardView.m; sourceTree = "<group>"; };
+		8B7AB37817A01272002232BE /* SetCardCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardCollectionViewCell.h; sourceTree = "<group>"; };
+		8B7AB37917A01272002232BE /* SetCardCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardCollectionViewCell.m; sourceTree = "<group>"; };
+		8B86394717B0620200824563 /* CardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardView.h; sourceTree = "<group>"; };
+		8B86394817B0620200824563 /* CardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardView.m; sourceTree = "<group>"; };
 		8BD84305178B62FC000319DF /* SetCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetCard.h; path = Model/SetCard.h; sourceTree = "<group>"; };
 		8BD84306178B62FC000319DF /* SetCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetCard.m; path = Model/SetCard.m; sourceTree = "<group>"; };
 		8BD84308178C881B000319DF /* SetCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardGameViewController.h; sourceTree = "<group>"; };
@@ -194,16 +203,14 @@
 			children = (
 				8B2EB2DF1785B19C009851B1 /* Model */,
 				8B2EB2D11785A604009851B1 /* MainStoryboard.storyboard */,
-				8B3D7EDB179F166C00E8C610 /* PlayingCardView */,
 				8B7AB373179EBA47002232BE /* GameResult */,
+				8B86394617B061A200824563 /* CardView */,
 				8BE19A971797123F00A4CE0D /* SettingsViewController.h */,
 				8BE19A981797123F00A4CE0D /* SettingsViewController.m */,
 				8B2EB2D41785A604009851B1 /* CardGameViewController.h */,
 				8B2EB2D51785A604009851B1 /* CardGameViewController.m */,
 				8BF1D79B178C61ED00F91A72 /* PlayingCardGameViewController.h */,
 				8BF1D79C178C61ED00F91A72 /* PlayingCardGameViewController.m */,
-				8B3D7F12179F177E00E8C610 /* PlayingCardCollectionViewCell.h */,
-				8B3D7F13179F177E00E8C610 /* PlayingCardCollectionViewCell.m */,
 				8BD84308178C881B000319DF /* SetCardGameViewController.h */,
 				8BD84309178C881B000319DF /* SetCardGameViewController.m */,
 				8B2EB2C01785A604009851B1 /* Supporting Files */,
@@ -264,6 +271,8 @@
 				8B3D7EDC179F169D00E8C610 /* cardback.png */,
 				8B3D7EF6179F169D00E8C610 /* PlayingCardView.h */,
 				8B3D7EF7179F169D00E8C610 /* PlayingCardView.m */,
+				8B3D7F12179F177E00E8C610 /* PlayingCardCollectionViewCell.h */,
+				8B3D7F13179F177E00E8C610 /* PlayingCardCollectionViewCell.m */,
 			);
 			name = PlayingCardView;
 			sourceTree = "<group>";
@@ -308,6 +317,28 @@
 				8B2EB2F41786EAB3009851B1 /* GameResultViewController.m */,
 			);
 			name = GameResult;
+			sourceTree = "<group>";
+		};
+		8B7AB37717A011EA002232BE /* SetCardView */ = {
+			isa = PBXGroup;
+			children = (
+				8B7AB37417A011D7002232BE /* SetCardView.h */,
+				8B7AB37517A011D7002232BE /* SetCardView.m */,
+				8B7AB37817A01272002232BE /* SetCardCollectionViewCell.h */,
+				8B7AB37917A01272002232BE /* SetCardCollectionViewCell.m */,
+			);
+			name = SetCardView;
+			sourceTree = "<group>";
+		};
+		8B86394617B061A200824563 /* CardView */ = {
+			isa = PBXGroup;
+			children = (
+				8B86394717B0620200824563 /* CardView.h */,
+				8B86394817B0620200824563 /* CardView.m */,
+				8B3D7EDB179F166C00E8C610 /* PlayingCardView */,
+				8B7AB37717A011EA002232BE /* SetCardView */,
+			);
+			name = CardView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -427,6 +458,9 @@
 				8BE19A991797123F00A4CE0D /* SettingsViewController.m in Sources */,
 				8B3D7F11179F169D00E8C610 /* PlayingCardView.m in Sources */,
 				8B3D7F14179F177E00E8C610 /* PlayingCardCollectionViewCell.m in Sources */,
+				8B7AB37617A011D7002232BE /* SetCardView.m in Sources */,
+				8B7AB37A17A01272002232BE /* SetCardCollectionViewCell.m in Sources */,
+				8B86394917B0620200824563 /* CardView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
