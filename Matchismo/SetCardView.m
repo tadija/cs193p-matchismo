@@ -14,40 +14,33 @@
 
 - (void)setNumber:(NSUInteger)number
 {
-    if ([[SetCard validNumbers] containsObject:@(number)]) {
-        _number = number;
-        [self setNeedsDisplay];
-    }
+    _number = [[SetCard validNumbers] containsObject:@(number)] ? number : 0;
+    [self setNeedsDisplay];
 }
 
 - (void)setSymbol:(SetCardSymbol)symbol
 {
-    if ([[SetCard validSymbols] containsObject:@(symbol)]) {
-        _symbol = symbol;
-        [self setNeedsDisplay];
-    }
+    _symbol = [[SetCard validSymbols] containsObject:@(symbol)] ? symbol : 0;
+    [self setNeedsDisplay];
 }
 
 - (void)setShading:(SetCardShading)shading
 {
-    if ([[SetCard validShadings] containsObject:@(shading)]) {
-        _shading = shading;
-        [self setNeedsDisplay];
-    }
+    _shading = [[SetCard validShadings] containsObject:@(shading)] ? shading : 0;
+    [self setNeedsDisplay];
 }
 
 - (void)setColor:(SetCardColor)color
 {
-    if ([[SetCard validColors] containsObject:@(color)]) {
-        _color = color;
-        [self setNeedsDisplay];
-    }
+    _color = [[SetCard validColors] containsObject:@(color)] ? color : 0;
+    [self setNeedsDisplay];
 }
 
 #pragma mark - Drawing
 
-#define CORNER_RADIUS 12.0
+#define CORNER_RADIUS 7
 #define LINE_WIDTH 2.0
+#define COLOR_PERCENT 0.93
 #define SYMBOL_WIDTH_PERCENTAGE .7
 #define SYMBOL_HEIGHT_PERCENTAGE .6
 #define STRIPE_OFFSET 5
@@ -56,14 +49,20 @@
 {
     // draw blank card
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:CORNER_RADIUS];
+    [roundedRect setLineWidth:LINE_WIDTH];    
     [roundedRect addClip];
     
-    // set blank card color
-    UIColor *backgroundColor = (self.isFaceUp) ? (self.isPenalty) ? [UIColor colorWithRed:1 green:0.93 blue:0.93 alpha:1] : [UIColor colorWithWhite:0.9 alpha:1] : [UIColor whiteColor];
-    [backgroundColor setFill];
-    UIRectFill(self.bounds);
+    // set blank card fill and stroke color
+    UIColor *lightBlueColor = [UIColor colorWithRed:COLOR_PERCENT green:COLOR_PERCENT blue:1 alpha:1];
+    UIColor *lightRedColor = [UIColor colorWithRed:1 green:COLOR_PERCENT blue:COLOR_PERCENT alpha:1];
+    UIColor *lightGreenColor = [UIColor colorWithRed:COLOR_PERCENT green:1 blue:COLOR_PERCENT alpha:1];
     
-    [[UIColor blackColor] setStroke];
+    UIColor *cardStrokeColor = (self.isFaceUp) ? ((self.isPenalty) ? [UIColor redColor] : (self.isUnplayable) ? [UIColor greenColor] : [UIColor blueColor]) : [UIColor grayColor];
+    UIColor *cardFillColor = (self.isFaceUp) ? ((self.isPenalty) ? lightRedColor : (self.isUnplayable) ? lightGreenColor : lightBlueColor) : [UIColor whiteColor];
+    
+    [cardFillColor setFill];
+    UIRectFill(self.bounds);
+    [cardStrokeColor setStroke];
     [roundedRect stroke];
     
     // draw symbols on card
@@ -87,26 +86,6 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         [self drawStripesOnPath:path withColor:strokeColor inContext:context];
     }
-}
-
-- (void)drawStripesOnPath:(UIBezierPath *)path withColor:(UIColor *)color inContext:(CGContextRef)context
-{
-    UIGraphicsPushContext(context);
-    
-    [path addClip];
-    
-    UIBezierPath *stripes = [[UIBezierPath alloc] init];
-    stripes.lineWidth = LINE_WIDTH / 3;
-    
-    for (int i = STRIPE_OFFSET; i < path.bounds.size.width; i += STRIPE_OFFSET) {
-        [stripes moveToPoint:CGPointMake(path.bounds.origin.x + i, 0)];
-        [stripes addLineToPoint:CGPointMake(path.bounds.origin.x + i, self.bounds.size.height)];
-    }
-    
-    [color setStroke];
-    [stripes stroke];
-    
-    UIGraphicsPopContext();
 }
 
 - (void)drawSymbolsOnPath:(UIBezierPath *)path
@@ -169,6 +148,26 @@
     [path addLineToPoint:CGPointMake(origin.x + size.width / 4, origin.y + size.height / 2)];
     [path addArcWithCenter:CGPointMake(origin.x + size.width / 4, origin.y) radius:size.height / 2 startAngle:M_PI / 2 endAngle:3 * M_PI / 2 clockwise:NO];
     [path closePath];
+}
+
+- (void)drawStripesOnPath:(UIBezierPath *)path withColor:(UIColor *)color inContext:(CGContextRef)context
+{
+    UIGraphicsPushContext(context);
+    
+    [path addClip];
+    
+    UIBezierPath *stripes = [[UIBezierPath alloc] init];
+    stripes.lineWidth = LINE_WIDTH / 3;
+    
+    for (int i = STRIPE_OFFSET; i < path.bounds.size.width; i += STRIPE_OFFSET) {
+        [stripes moveToPoint:CGPointMake(path.bounds.origin.x + i, 0)];
+        [stripes addLineToPoint:CGPointMake(path.bounds.origin.x + i, self.bounds.size.height)];
+    }
+    
+    [color setStroke];
+    [stripes stroke];
+    
+    UIGraphicsPopContext();
 }
 
 @end

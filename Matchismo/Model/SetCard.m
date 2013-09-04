@@ -8,26 +8,7 @@
 
 #import "SetCard.h"
 
-@interface SetCard()
-- (BOOL)checkForSet:(NSArray *)array;
-@end
-
 @implementation SetCard
-
-- (BOOL)checkForSet:(NSArray *)array // of three objects
-{
-    BOOL isSet = false;
-    
-    if (array && [array count] == 3) {
-        NSSet *set = [NSSet setWithArray:array];
-        if ([set count] == 1 || [set count] == 3) {
-            // all are identical, or all are different
-            isSet = true;
-        }
-    }
-    
-    return isSet;
-}
 
 #define SET_SCORE 6
 
@@ -57,12 +38,27 @@
         
         // check for set on all properties
         if ([self checkForSet:numbers] && [self checkForSet:symbols] && [self checkForSet:shadings] && [self checkForSet:colors]) {
-            score = SET_SCORE;
+            score += SET_SCORE;
         }
         
     }
     
     return score;
+}
+
+- (BOOL)checkForSet:(NSArray *)array // of three objects
+{
+    BOOL isSet = false;
+    
+    if (array && [array count] == 3) {
+        NSSet *set = [NSSet setWithArray:array];
+        if ([set count] == 1 || [set count] == 3) {
+            // all are identical, or all are different
+            isSet = true;
+        }
+    }
+    
+    return isSet;
 }
 
 - (NSString *)contents
@@ -77,9 +73,7 @@
 
 - (void)setNumber:(NSUInteger)number
 {
-    if ([[SetCard validNumbers] containsObject:@(number)]) {
-        _number = number;
-    }
+    _number = [[SetCard validNumbers] containsObject:@(number)] ? number : 0;
 }
 
 + (NSArray *)validSymbols
@@ -89,9 +83,7 @@
 
 - (void)setSymbol:(SetCardSymbol)symbol
 {
-    if ([[SetCard validSymbols] containsObject:@(symbol)]) {
-        _symbol = symbol;
-    }
+    _symbol = [[SetCard validSymbols] containsObject:@(symbol)] ? symbol : 0;
 }
 
 + (NSArray *)validShadings
@@ -101,9 +93,7 @@
 
 - (void)setShading:(SetCardShading)shading
 {
-    if ([[SetCard validShadings] containsObject:@(shading)]) {
-        _shading = shading;
-    }
+    _shading = [[SetCard validShadings] containsObject:@(shading)] ? shading : 0;
 }
 
 + (NSArray *)validColors
@@ -113,9 +103,7 @@
 
 - (void)setColor:(SetCardColor)color
 {
-    if ([[SetCard validColors] containsObject:@(color)]) {
-        _color = color;
-    }
+    _color = [[SetCard validColors] containsObject:@(color)] ? color : 0;
 }
 
 @end

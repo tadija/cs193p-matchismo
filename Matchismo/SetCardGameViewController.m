@@ -14,19 +14,73 @@
 
 @interface SetCardGameViewController()
 @property (weak, nonatomic) IBOutlet UIButton *dealButton;
+@property (strong, nonatomic) NSMutableArray *selectedCards; // of SetCards
+@property (strong, nonatomic) IBOutletCollection(SetCardView) NSArray *selectedCardViews;
 @end
 
 @implementation SetCardGameViewController
 
 @synthesize game = _game;
+@synthesize selectedCards = _selectedCards;
+
+#define MATCH_COUNT 3
 
 - (CardMatchingGame *)game
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:12
-                                                          usingDeck:[[SetCardDeck alloc] init]
-                                                      andMatchCount:3
-                                                       withSettings:[[Settings alloc] initGame:@"Set" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
+    if (!_game) {
+        _game = [[CardMatchingGame alloc] initWithCardCount:12
+                                                  usingDeck:[[SetCardDeck alloc] init]
+                                              andMatchCount:MATCH_COUNT
+                                               withSettings:[[Settings alloc] initGame:@"Set" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
+        self.selectedCards = nil; // reset selectedCardViews if new game is started 
+    }
     return _game;
+}
+
+- (NSMutableArray *)selectedCards
+{
+    if (!_selectedCards) _selectedCards = [[NSMutableArray alloc] init];
+    return _selectedCards;
+}
+
+- (void)setSelectedCards:(NSMutableArray *)selectedCards
+{
+    _selectedCards = selectedCards;
+    
+    for (int i = 0; i < [self.selectedCardViews count]; i++) {
+        SetCardView *setCardView = self.selectedCardViews[i];
+        if ([self.selectedCards count] > i) {
+            SetCard *setCard = self.selectedCards[i];
+            setCardView.number = setCard.number;
+            setCardView.symbol = setCard.symbol;
+            setCardView.shading = setCard.shading;
+            setCardView.color = setCard.color;
+            setCardView.faceUp = setCard.isFaceUp;
+            setCardView.unplayable = setCard.isUnplayable;
+            setCardView.penalty = setCard.isPenalty;
+        } else {
+            setCardView.number = 0;
+            setCardView.symbol = 0;
+            setCardView.shading = 0;
+            setCardView.color = 0;
+            setCardView.faceUp = NO;
+            setCardView.unplayable = NO;
+            setCardView.penalty = NO;
+        }
+    }
+    
+    if ([self.selectedCards count] == [self.selectedCardViews count]) {
+        [self.selectedCards removeAllObjects];
+    }
+}
+
+#pragma mark - updating the UI
+
+- (void)viewDidLoad
+{
+    // sort selectedCardViews by tag
+    NSSortDescriptor *ascendingSort = [[NSSortDescriptor alloc] initWithKey:@"tag" ascending:YES];
+    self.selectedCardViews = [self.selectedCardViews sortedArrayUsingDescriptors:[NSArray arrayWithObject:ascendingSort]];
 }
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
@@ -40,32 +94,56 @@
             setCardView.shading = setCard.shading;
             setCardView.color = setCard.color;
             setCardView.faceUp = setCard.isFaceUp;
+            setCardView.unplayable = setCard.isUnplayable;
             setCardView.penalty = setCard.isPenalty;
         }
     }
 }
 
-- (void)updateCellsWithIndexPaths:(NSMutableArray *)indexPaths
-{    
-    NSMutableIndexSet *unplayableCardIndexes = [[NSMutableIndexSet alloc] init];
-    for (NSIndexPath *indexPath in indexPaths)
-    {
-        [unplayableCardIndexes addIndex:indexPath.item];
-    }
-    
-    [self.cardCollectionView performBatchUpdates:^{
-        [self.game deleteCardsAtIndexes:unplayableCardIndexes];
-        [self.cardCollectionView deleteItemsAtIndexPaths:indexPaths];
-    } completion:nil];
-}
-
-- (void)updateCustomUI
+- (void)updateCustomUI:(NSInteger)flippedCardIndex
 {
+    // disable deal button if there are no more cards in deck
     if (!self.game.cardsInDeck) {
         self.dealButton.enabled = NO;
         self.dealButton.alpha = 0.3;
+    } else {
+        self.dealButton.enabled = YES;
+        self.dealButton.alpha = 1;
+    }
+    
+    // manage selectedCards (selectedCardViews)
+    NSMutableArray *flippedCards = self.selectedCards;
+    Card *flippedCard = [self.game cardAtIndex:flippedCardIndex];
+    if (flippedCard) {
+        if ([flippedCard isKindOfClass:[SetCard class]]) {
+            SetCard *flippedSetCard = (SetCard *)flippedCard;
+            flippedCard.isFaceUp ? [flippedCards addObject:flippedSetCard] : [flippedCards removeObject:flippedSetCard];
+            self.selectedCards = flippedCards;
+        }
+    }
+    
+    // remove unplayable cards
+    NSMutableIndexSet *unplayableCardIndexes = [[NSMutableIndexSet alloc] init];
+    NSMutableArray *unplayableCardIndexPaths = [[NSMutableArray alloc] init];
+    // get all unplayable cards
+    for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
+        NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
+        Card *card = [self.game cardAtIndex:indexPath.item];
+        if (card.isUnplayable) {
+            [unplayableCardIndexes addIndex:indexPath.item];
+            [unplayableCardIndexPaths addObject:indexPath];
+        }
+    }
+    // remove them from self.game and self.cardCollectionView
+    if ([unplayableCardIndexPaths count]) {
+        [self.cardCollectionView performBatchUpdates:^{
+            [self.game deleteCardsAtIndexes:unplayableCardIndexes];
+            [self.cardCollectionView deleteItemsAtIndexPaths:unplayableCardIndexPaths];
+        } completion:nil];
     }
 }
+
+#pragma mark - Target/Action/Gestures
 
 #define DEAL_CARDS_COUNT 3
 - (IBAction)dealMoreCards:(UIButton *)sender
@@ -80,79 +158,10 @@
     [self.cardCollectionView performBatchUpdates:^{
         [self.cardCollectionView insertItemsAtIndexPaths:newCardIndexPaths];
     } completion:^(BOOL finished) {
-        [self.cardCollectionView scrollToItemAtIndexPath:[newCardIndexPaths lastObject] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+        [self.cardCollectionView scrollToItemAtIndexPath:[newCardIndexPaths lastObject] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
     }];
     
-    [self updateCustomUI];
-}
-
-- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info
-{
-    NSMutableAttributedString *attributedInfo = [[NSMutableAttributedString alloc] initWithString:info];
-    [attributedInfo addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13],
-                                     NSForegroundColorAttributeName : [UIColor whiteColor] }
-                            range:NSMakeRange(0, [attributedInfo length])];
-    
-    // looking for { ... }
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(.+?)\\}" options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger numberOfMatches = [regex numberOfMatchesInString:info options:0 range:NSMakeRange(0, [info length])];
-    // change NSMutableAttributedString for each match
-    for (int i = 1; i <= numberOfMatches; i++) {
-        NSRange matchRange = [regex rangeOfFirstMatchInString:[attributedInfo string] options:0 range:NSMakeRange(0, [[attributedInfo string] length])];
-        if (!NSEqualRanges(matchRange, NSMakeRange(NSNotFound, 0))) {
-            NSString *matchString = [[attributedInfo string] substringWithRange:NSMakeRange(matchRange.location + 1, matchRange.length - 2)];
-            [attributedInfo replaceCharactersInRange:matchRange withAttributedString:[self cardContentsWithString:matchString]];
-        }
-    }
-    
-    // set alignment and return final NSAttributedString
-    NSMutableParagraphStyle *attributedStyle = [[NSMutableParagraphStyle alloc] init];
-    [attributedStyle setAlignment:NSTextAlignmentCenter];
-    [attributedInfo addAttribute:NSParagraphStyleAttributeName value:attributedStyle range:NSMakeRange(0, [attributedInfo length])];
-    return attributedInfo;
-}
-
-#pragma mark Helper methods
-
-- (NSAttributedString *)cardContentsWithString:(NSString *)string
-{
-    NSArray *arr = [string componentsSeparatedByString:@";"];
-    NSString *text = [self textWithSymbol:arr[1] andNumber:arr[0]];
-    NSDictionary *attributes = [self attributesWithShading:arr[2] andColor:arr[3]];
-    
-    NSAttributedString *cardContents = [[NSAttributedString alloc] initWithString:text attributes:attributes];
-    
-    return cardContents;
-}
-
-- (NSString *)textWithSymbol:(NSString *)symbol andNumber:(NSNumber *)number
-{
-    NSDictionary *symbols = @{ @"diamond" : @"▲", @"squiggle" : @"■", @"oval" : @"●" };
-    
-    NSString *content = @"";
-    for (int i = 1; i <= [number integerValue]; i++) {
-        content = [content stringByAppendingString:[symbols objectForKey:symbol]];
-    }
-    
-    return content;
-}
-
-- (NSDictionary *)attributesWithShading:(NSString *)shading andColor:(NSString *)color
-{
-    NSDictionary *colors = @{ @"red" : [UIColor redColor], @"green" : [UIColor greenColor], @"purple" : [UIColor purpleColor] };
-    
-    UIColor *solidColor = [colors objectForKey:color];
-    UIColor *stripedColor = [[colors objectForKey:color] colorWithAlphaComponent:0.1];
-    UIColor *openColor = [UIColor whiteColor];
-    NSDictionary *shadings = @{ @"solid" : solidColor, @"striped" : stripedColor, @"open" : openColor };
-    
-    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:18],
-                                  NSStrokeWidthAttributeName: ([shading isEqualToString:@"solid"]) ? @0 : @-5,
-                                  NSStrokeColorAttributeName: solidColor,
-                                  NSForegroundColorAttributeName: [shadings objectForKey:shading]
-                                };
-    
-    return attributes;
+    [self updateCustomUI:-1];
 }
 
 @end

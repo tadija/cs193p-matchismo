@@ -12,13 +12,14 @@
 @interface SettingsViewController ()
 @property (strong, nonatomic) Settings *settings;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *difficultyPicker;
-@property (weak, nonatomic) IBOutlet UILabel *flipLabel;
-@property (weak, nonatomic) IBOutlet UILabel *mismatchLabel;
-@property (weak, nonatomic) IBOutlet UILabel *matchLabel;
-@property (weak, nonatomic) IBOutlet UILabel *setLabel;
+@property (weak, nonatomic) IBOutlet UITextView *display;
 @end
 
 @implementation SettingsViewController
+
+@synthesize difficulty = _difficulty;
+
+#pragma mark - Properties
 
 - (Settings *)settings
 {
@@ -32,17 +33,7 @@
     return _difficulty;
 }
 
-@synthesize difficulty = _difficulty;
-
 #define DIFFICULTY_KEY @"Settings_difficulty"
-
-+ (NSString *)getSavedDifficulty
-{
-    NSString *defaultDifficulty = [Settings defaultDifficulty];
-    NSString *savedDifficulty = [[NSUserDefaults standardUserDefaults] stringForKey:DIFFICULTY_KEY];
-
-    return (!savedDifficulty) ? defaultDifficulty : savedDifficulty;
-}
 
 - (void)setDifficulty:(NSString *)difficulty
 {
@@ -53,6 +44,24 @@
     [self updateUI];
 }
 
++ (NSString *)getSavedDifficulty
+{
+    NSString *defaultDifficulty = [Settings defaultDifficulty];
+    NSString *savedDifficulty = [[NSUserDefaults standardUserDefaults] stringForKey:DIFFICULTY_KEY];
+
+    return (!savedDifficulty) ? defaultDifficulty : savedDifficulty;
+}
+
+#pragma mark - View Controller Lifecycle
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self updateUI];
+}
+
+#pragma mark - UI stuff
+
 - (IBAction)changeDifficulty:(UISegmentedControl *)sender
 {
     [self setDifficulty:[sender titleForSegmentAtIndex:[sender selectedSegmentIndex]]];
@@ -61,16 +70,30 @@
 - (void)updateUI
 {
     self.difficultyPicker.selectedSegmentIndex = [[Settings validDifficulties] indexOfObject:self.settings.difficulty];
-    self.flipLabel.text = [NSString stringWithFormat:@"Flip: -%d", self.settings.flipCost];
-    self.mismatchLabel.text = [NSString stringWithFormat:@"Mismatch: -%d", self.settings.mismatchPenalty];
-    self.matchLabel.text = [NSString stringWithFormat:@"Match: %d", self.settings.matchBonus];
-    self.setLabel.text = [NSString stringWithFormat:@"Set: %d", self.settings.setBonus];
+    
+    NSMutableAttributedString *completeString = [[NSMutableAttributedString alloc] init];
+    [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Flip: -%d \n", self.settings.flipCost]
+                                                                   andColor:[UIColor colorWithRed:1 green:0.25 blue:0.25 alpha:1]]];
+    [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Mismatch: -%d \n", self.settings.mismatchPenalty]
+                                                                   andColor:[UIColor colorWithRed:1 green:0.25 blue:0.25 alpha:1]]];
+    [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Match: %d \n", self.settings.matchBonus]
+                                                                   andColor:[UIColor colorWithRed:0.5 green:1 blue:0 alpha:1]]];
+    [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Set: %d \n", self.settings.setBonus]
+                                                                   andColor:[UIColor colorWithRed:0.5 green:1 blue:0 alpha:1]]];
+    
+    NSMutableParagraphStyle *attributedStyle = [[NSMutableParagraphStyle alloc] init];
+    [attributedStyle setAlignment:NSTextAlignmentCenter];
+    [completeString addAttribute:NSParagraphStyleAttributeName value:attributedStyle range:NSMakeRange(0, [completeString length])];
+    
+    self.display.attributedText = completeString;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (NSAttributedString *)createAttributedStringWith:(NSString *)string andColor:(UIColor *)color
 {
-    [super viewWillAppear:animated];
-    [self updateUI];
+    NSDictionary *attributes = @{ NSFontAttributeName: [UIFont boldSystemFontOfSize:40], NSForegroundColorAttributeName: color };
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+    
+    return attributedString;
 }
 
 @end

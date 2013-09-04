@@ -32,7 +32,6 @@
 		8B3D7ED61795EFAA00E8C610 /* scores.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7ED51795EFAA00E8C610 /* scores.png */; };
 		8B3D7ED81795F0B000E8C610 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7ED71795F0B000E8C610 /* settings.png */; };
 		8B3D7EDA1795F15700E8C610 /* matchismo-icons.ai in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7ED91795F15700E8C610 /* matchismo-icons.ai */; };
-		8B3D7EF8179F169D00E8C610 /* cardback.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7EDC179F169D00E8C610 /* cardback.png */; };
 		8B3D7F11179F169D00E8C610 /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3D7EF7179F169D00E8C610 /* PlayingCardView.m */; };
 		8B3D7F14179F177E00E8C610 /* PlayingCardCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3D7F13179F177E00E8C610 /* PlayingCardCollectionViewCell.m */; };
 		8B3D7FC1179F2D5900E8C610 /* J♠.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8B3D7FA9179F2D5900E8C610 /* J♠.jpg */; };
@@ -108,7 +107,6 @@
 		8B3D7ED51795EFAA00E8C610 /* scores.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scores.png; sourceTree = "<group>"; };
 		8B3D7ED71795F0B000E8C610 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		8B3D7ED91795F15700E8C610 /* matchismo-icons.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "matchismo-icons.ai"; sourceTree = "<group>"; };
-		8B3D7EDC179F169D00E8C610 /* cardback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardback.png; sourceTree = "<group>"; };
 		8B3D7EF6179F169D00E8C610 /* PlayingCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardView.h; sourceTree = "<group>"; };
 		8B3D7EF7179F169D00E8C610 /* PlayingCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardView.m; sourceTree = "<group>"; };
 		8B3D7F12179F177E00E8C610 /* PlayingCardCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardCollectionViewCell.h; sourceTree = "<group>"; };
@@ -202,11 +200,10 @@
 			isa = PBXGroup;
 			children = (
 				8B2EB2DF1785B19C009851B1 /* Model */,
-				8B2EB2D11785A604009851B1 /* MainStoryboard.storyboard */,
 				8B7AB373179EBA47002232BE /* GameResult */,
+				8BB1567117D4E03F00AE5B8E /* Settings */,
 				8B86394617B061A200824563 /* CardView */,
-				8BE19A971797123F00A4CE0D /* SettingsViewController.h */,
-				8BE19A981797123F00A4CE0D /* SettingsViewController.m */,
+				8B2EB2D11785A604009851B1 /* MainStoryboard.storyboard */,
 				8B2EB2D41785A604009851B1 /* CardGameViewController.h */,
 				8B2EB2D51785A604009851B1 /* CardGameViewController.m */,
 				8BF1D79B178C61ED00F91A72 /* PlayingCardGameViewController.h */,
@@ -258,8 +255,6 @@
 				8BF1D799178C4AF000F91A72 /* SetCardDeck.m */,
 				8B2EB2EC1785BA26009851B1 /* CardMatchingGame.h */,
 				8B2EB2ED1785BA26009851B1 /* CardMatchingGame.m */,
-				8BE19A941796E63B00A4CE0D /* Settings.h */,
-				8BE19A951796E63B00A4CE0D /* Settings.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -268,7 +263,6 @@
 			isa = PBXGroup;
 			children = (
 				8B3D7FA8179F2D5900E8C610 /* Face Card Images */,
-				8B3D7EDC179F169D00E8C610 /* cardback.png */,
 				8B3D7EF6179F169D00E8C610 /* PlayingCardView.h */,
 				8B3D7EF7179F169D00E8C610 /* PlayingCardView.m */,
 				8B3D7F12179F177E00E8C610 /* PlayingCardCollectionViewCell.h */,
@@ -341,6 +335,17 @@
 			name = CardView;
 			sourceTree = "<group>";
 		};
+		8BB1567117D4E03F00AE5B8E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8BE19A941796E63B00A4CE0D /* Settings.h */,
+				8BE19A951796E63B00A4CE0D /* Settings.m */,
+				8BE19A971797123F00A4CE0D /* SettingsViewController.h */,
+				8BE19A981797123F00A4CE0D /* SettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -405,7 +410,6 @@
 				8B3D7ED61795EFAA00E8C610 /* scores.png in Resources */,
 				8B3D7ED81795F0B000E8C610 /* settings.png in Resources */,
 				8B3D7EDA1795F15700E8C610 /* matchismo-icons.ai in Resources */,
-				8B3D7EF8179F169D00E8C610 /* cardback.png in Resources */,
 				8B3D7FC1179F2D5900E8C610 /* J♠.jpg in Resources */,
 				8B3D7FC2179F2D5900E8C610 /* J♠@2x.jpg in Resources */,
 				8B3D7FC3179F2D5900E8C610 /* J♣.jpg in Resources */,

@@ -15,8 +15,6 @@
 @property (strong, nonatomic) CardMatchingGame *game; // abstract
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card; // abstract
-- (void)updateCellsWithIndexPaths:(NSMutableArray *)indexPaths; // abstract
-- (void)updateCustomUI; // abstract
-- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info; // abstract
+- (void)updateCustomUI:(NSInteger)flippedCardIndex; // abstract
 
 @end

@@ -12,13 +12,17 @@
 #import "PlayingCard.h"
 #import "PlayingCardCollectionViewCell.h"
 
+@interface PlayingCardGameViewController()
+@property (weak, nonatomic) IBOutlet UILabel *lastFlipDescriptionLabel;
+@end
+
 @implementation PlayingCardGameViewController
 
 @synthesize game = _game;
 
 - (CardMatchingGame *)game
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:22
+    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:24
                                                           usingDeck:[[PlayingCardDeck alloc] init]
                                                       andMatchCount:2
                                                        withSettings:[[Settings alloc] initGame:@"Match" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
@@ -39,22 +43,10 @@
     }
 }
 
-- (void)updateCellsWithIndexPaths:(NSMutableArray *)indexPaths
+- (void)updateCustomUI:(NSInteger)flippedCardIndex
 {
-    // abstract
-}
-
-- (void)updateCustomUI
-{
-    // abstract
-}
-
-- (NSAttributedString *)parseFlipInfoFromString:(NSString *)info
-{
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{(.+?)\\}" options:NSRegularExpressionCaseInsensitive error:nil];
-    NSString *newString = [regex stringByReplacingMatchesInString:info options:0 range:NSMakeRange(0, [info length]) withTemplate:@"$1"];
-    
-    return [[NSAttributedString alloc] initWithString:newString];
+    NSString *flipInfo = [self.game.allFlipsInfo lastObject];
+    self.lastFlipDescriptionLabel.attributedText = [[NSAttributedString alloc] initWithString:flipInfo];
 }
 
 @end

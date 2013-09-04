@@ -18,16 +18,38 @@
 
 - (void)updateUI
 {
-    NSString *displayText = @"";
+    NSMutableAttributedString *displayText = [[NSMutableAttributedString alloc] init];
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
-    for (GameResult *result in [[GameResult allGameResults] sortedArrayUsingSelector:self.sortSelector]) { // sorted
-        displayText = [displayText stringByAppendingFormat:@"Date: %@ | Duration: %0g\nGame: %@ | Score: %d | Difficulty: %@\n\n",
-                       [formatter stringFromDate:result.end], round(result.duration), result.game, result.score, result.difficulty];
+    
+    for (GameResult *result in [[GameResult allGameResults] sortedArrayUsingSelector:self.sortSelector]) { // sorted        
+        NSString *normalString = [NSString stringWithFormat:@"Date: %@ | Duration: %0g\n", [formatter stringFromDate:result.end], round(result.duration)];
+        NSString *boldString = [NSString stringWithFormat:@"%@ | Score: %d | Difficulty: %@\n\n", result.game, result.score, result.difficulty];
+        
+        UIColor *color = ([result.game isEqual: @"Match"]) ? [UIColor colorWithRed:0.5 green:1 blue:0 alpha:1] : [UIColor colorWithRed:0.4 green:0.8 blue:1 alpha:1];
+        
+        [displayText appendAttributedString:[self createAttributedStringWith:normalString andColor:color bold:NO]];
+        [displayText appendAttributedString:[self createAttributedStringWith:boldString andColor:color bold:YES]];
     }
-    self.display.textColor = [UIColor whiteColor];
-    self.display.text = displayText;
+    
+    self.display.attributedText = displayText;
+}
+
+- (NSAttributedString *)createAttributedStringWith:(NSString *)string andColor:(UIColor *)color bold:(BOOL)isBold
+{
+    NSDictionary *attributes = [[NSDictionary alloc] init];
+    
+    if (isBold) {
+        attributes = @{ NSFontAttributeName: [UIFont boldSystemFontOfSize:16], NSForegroundColorAttributeName: color };
+    } else {
+        attributes = @{ NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: [UIColor whiteColor] };
+    }
+    
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+    
+    return attributedString;
 }
 
 #pragma mark - View Controller Lifecycle

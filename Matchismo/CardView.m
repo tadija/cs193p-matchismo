@@ -10,8 +10,6 @@
 
 @implementation CardView
 
-#pragma mark - Initialization
-
 - (void)setup
 {
     // Initialization that can't wait until viewDidLoad
@@ -33,9 +31,17 @@
     return self;
 }
 
+#pragma mark - Properties
+
 - (void)setFaceUp:(BOOL)faceUp
 {
     _faceUp = faceUp;
+    [self setNeedsDisplay];
+}
+
+- (void)setUnplayable:(BOOL)unplayable
+{
+    _unplayable = unplayable;
     [self setNeedsDisplay];
 }
 

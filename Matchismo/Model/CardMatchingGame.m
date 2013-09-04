@@ -19,12 +19,7 @@
 
 @implementation CardMatchingGame
 
-- (NSMutableArray *)cards
-{
-    if (!_cards) _cards = [[NSMutableArray alloc] init];
-    return _cards;
-}
-
+// designated initializer
 - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck andMatchCount:(NSUInteger)matchCount withSettings:(Settings *)settings
 {
     self = [super init];
@@ -47,6 +42,14 @@
     return self;
 }
 
+#pragma mark - Properties
+
+- (NSMutableArray *)cards
+{
+    if (!_cards) _cards = [[NSMutableArray alloc] init];
+    return _cards;
+}
+
 - (NSUInteger)cardsInGame
 {
     return [self.cards count];
@@ -55,21 +58,6 @@
 - (NSUInteger)cardsInDeck
 {
     return [self.deck cardsLeft];
-}
-
-- (NSIndexSet *)dealCards:(NSUInteger)numberOfCards
-{
-    NSMutableIndexSet *newCardIndexes = [[NSMutableIndexSet alloc] init];
-    
-    for (int i = 0; i < numberOfCards; i++) {
-        Card *card = [self.deck drawRandomCard];
-        if (card) {
-            [self.cards addObject:card];
-            [newCardIndexes addIndex:[self.cards indexOfObject:card]];
-        }
-    }
-    
-    return newCardIndexes;
 }
 
 - (NSString *)flipInfo
@@ -84,6 +72,8 @@
     return _allFlipsInfo;
 }
 
+#pragma mark - Game
+
 - (Card *)cardAtIndex:(NSUInteger)index
 {
     return (index < [self.cards count]) ? self.cards[index] : nil;
@@ -92,25 +82,27 @@
 - (void)flipCardAtIndex:(NSUInteger)index
 {
     Card *card = [self cardAtIndex:index];
+
+    // add all other faceup and playable cards to array
+    NSMutableArray *otherCards = [[NSMutableArray alloc] init];
+    for (Card *otherCard in self.cards) {
+        if (otherCard.isFaceUp && !otherCard.isUnplayable) {
+            if (otherCard.isPenalty) {
+                otherCard.faceUp = NO;
+                otherCard.penalty = NO;
+            } else {
+                [otherCards addObject:otherCard];
+            }
+        }
+    }
     
     if (card && !card.isUnplayable) {
         if (!card.isFaceUp) {
-            // add all other faceup and playable cards to array
-            NSMutableArray *otherCards = [[NSMutableArray alloc] init];
-            for (Card *otherCard in self.cards) {
-                if (otherCard.isFaceUp && !otherCard.isUnplayable) {
-                    if (otherCard.isPenalty) {
-                        otherCard.faceUp = NO;
-                        otherCard.penalty = NO;
-                    } else {
-                        [otherCards addObject:otherCard];
-                    }
-                }
-            }
+
             // if there aren't any other cards take flip cost and show info
             if ([otherCards count] == 0) {
                 self.score -= self.settings.flipCost;
-                self.flipInfo = [NSString stringWithFormat:@"Flipped up {%@}", card.contents];
+                self.flipInfo = [NSString stringWithFormat:@"Flipped up %@", card.contents];
                 // if there is one
             } else if ([otherCards count] == 1) {
                 Card *otherCard = [otherCards lastObject];
@@ -121,13 +113,13 @@
                         otherCard.unplayable = YES;
                         card.unplayable = YES;
                         self.score += matchScore * self.settings.matchBonus;
-                        self.flipInfo = [NSString stringWithFormat:@"Matched {%@} and {%@} for %d points!", card.contents, otherCard.contents, matchScore * self.settings.matchBonus];
+                        self.flipInfo = [NSString stringWithFormat:@"Matched %@ and %@", card.contents, otherCard.contents];
                     // do stuff for miss match
                     } else {
                         otherCard.penalty = YES;
                         card.penalty = YES;
                         self.score -= self.settings.mismatchPenalty;
-                        self.flipInfo = [NSString stringWithFormat:@"{%@} and {%@} don't match! (-%d penalty)", card.contents, otherCard.contents, self.settings.mismatchPenalty];
+                        self.flipInfo = [NSString stringWithFormat:@"%@ and %@ mismatch!", card.contents, otherCard.contents];
                     }
                 }
                 // do stuff for 3-card match game
@@ -145,7 +137,6 @@
                     otherCard1.unplayable = YES;
                     otherCard2.unplayable = YES;
                     card.unplayable = YES;
-                    //[self.cards removeObjectsInArray:@[card, otherCard1, otherCard2]];
                     self.score += matchScore * self.settings.setBonus;
                     self.flipInfo = [NSString stringWithFormat:@"Matched {%@} {%@} {%@} for %d points!", card.contents, otherCard1.contents, otherCard2.contents, matchScore * self.settings.setBonus];
                 } else {
@@ -158,13 +149,28 @@
             }
         }
         else { // if it's a flip down
-            self.flipInfo = [NSString stringWithFormat:@"Flipped down {%@}", card.contents];
+            self.flipInfo = [NSString stringWithFormat:@"Flipped down %@", card.contents];
         }
         // and add flip info to allFlipsInfo
         [self.allFlipsInfo addObject:self.flipInfo];
         // in any case flip card
         card.faceUp = !card.isFaceUp;
     }
+}
+
+- (NSIndexSet *)dealCards:(NSUInteger)numberOfCards
+{
+    NSMutableIndexSet *newCardIndexes = [[NSMutableIndexSet alloc] init];
+    
+    for (int i = 0; i < numberOfCards; i++) {
+        Card *card = [self.deck drawRandomCard];
+        if (card) {
+            [self.cards addObject:card];
+            [newCardIndexes addIndex:[self.cards indexOfObject:card]];
+        }
+    }
+    
+    return newCardIndexes;
 }
 
 - (void)deleteCardsAtIndexes:(NSIndexSet *)indexes

@@ -8,29 +8,9 @@
 
 #import "PlayingCardView.h"
 
-@interface PlayingCardView()
-@property (nonatomic) CGFloat faceCardScaleFactor;
-@end
-
 @implementation PlayingCardView
 
 #pragma mark - Properties
-
-@synthesize faceCardScaleFactor = _faceCardScaleFactor;
-
-#define DEFAULT_FACE_CARD_SCALE_FACTOR 0.90
-
-- (CGFloat)faceCardScaleFactor
-{
-    if (!_faceCardScaleFactor) _faceCardScaleFactor = DEFAULT_FACE_CARD_SCALE_FACTOR;
-    return _faceCardScaleFactor;
-}
-
-- (void)setFaceCardScaleFactor:(CGFloat)faceCardScaleFactor
-{
-    _faceCardScaleFactor = faceCardScaleFactor;
-    [self setNeedsDisplay];
-}
 
 - (void)setSuit:(NSString *)suit
 {
@@ -52,6 +32,8 @@
 #pragma mark - Drawing
 
 #define CORNER_RADIUS 12.0
+#define IMAGE_INSET 0.1
+#define CARD_BACK_INSET 6
 
 - (void)drawRect:(CGRect)rect
 {
@@ -66,8 +48,8 @@
         UIImage *faceImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@%@.jpg", [self rankAsString], self.suit]];
         if (faceImage) {
             CGRect imageRect = CGRectInset(self.bounds,
-                                           self.bounds.size.width * (1.0 - self.faceCardScaleFactor),
-                                           self.bounds.size.height * (1.0 - self.faceCardScaleFactor));
+                                           self.bounds.size.width * IMAGE_INSET,
+                                           self.bounds.size.height * IMAGE_INSET);
             [faceImage drawInRect:imageRect];
         } else {
             [self drawPips];
@@ -75,7 +57,8 @@
         
         [self drawCorners];
     } else {
-        [[UIImage imageNamed:@"cardback.png"] drawInRect:self.bounds];
+        CGRect cardBack = CGRectMake(self.bounds.origin.x + CARD_BACK_INSET, self.bounds.origin.y + CARD_BACK_INSET, self.bounds.size.width - CARD_BACK_INSET * 2, self.bounds.size.height - CARD_BACK_INSET * 2);
+        [[UIImage imageNamed:@"redCardBack.jpg"] drawInRect:cardBack];
     }
     
     [[UIColor blackColor] setStroke];
@@ -116,17 +99,6 @@
 - (void)popContext
 {
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
-}
-
-#pragma mark - Gesture Handlers
-
-- (void)pinch:(UIPinchGestureRecognizer *)gesture
-{
-    if ((gesture.state == UIGestureRecognizerStateChanged) ||
-        (gesture.state == UIGestureRecognizerStateEnded)) {
-        self.faceCardScaleFactor *= gesture.scale;
-        gesture.scale = 1;
-    }
 }
 
 #pragma mark - Draw Pips
