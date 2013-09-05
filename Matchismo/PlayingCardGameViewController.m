@@ -59,11 +59,13 @@
 
 - (IBAction)restartGame
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Restart game" message:@"How many cards do you want?\n(Default: 24 | Allowed: 2-52)"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Restart game" message:@"How many cards do you want?"
                                                    delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
     
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     UITextField *textField = [alert textFieldAtIndex:0];
+    textField.placeholder = @"Enter a number (2-52)";
+    textField.text = [NSString stringWithFormat:@"%d", self.cardCount];
     textField.keyboardType = UIKeyboardTypeNumberPad;
     
     [alert show];
