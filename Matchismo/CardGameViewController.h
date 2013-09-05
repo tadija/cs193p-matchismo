@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "CardMatchingGame.h"
+#import "GameResult.h"
 
 @interface CardGameViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UICollectionView *cardCollectionView;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame *game; // abstract
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card; // abstract
 - (void)updateCustomUI:(NSInteger)flippedCardIndex; // abstract
+- (IBAction)restartGame; // abstract
 
 @end

@@ -12,7 +12,7 @@
 #import "SetCard.h"
 #import "SetCardCollectionViewCell.h"
 
-@interface SetCardGameViewController()
+@interface SetCardGameViewController() <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @property (strong, nonatomic) NSMutableArray *selectedCards; // of SetCards
 @property (strong, nonatomic) IBOutletCollection(SetCardView) NSArray *selectedCardViews;
@@ -162,6 +162,23 @@
     }];
     
     [self updateCustomUI:-1];
+}
+
+- (IBAction)restartGame
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Restart game" message:@"Are you sure?"
+                                                   delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    // start new game
+    if (buttonIndex == 1) {
+        self.game = nil;
+        [self.cardCollectionView reloadData];
+        [self updateCustomUI:-1];
+    }
 }
 
 @end

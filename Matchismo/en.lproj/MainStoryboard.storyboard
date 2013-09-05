@@ -34,7 +34,7 @@
                                             <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="restartGame:" destination="2" eventType="touchUpInside" id="o7A-1h-8pj"/>
+                                            <action selector="restartGame" destination="2" eventType="touchUpInside" id="TQW-HG-hvj"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Flip up any card!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hu0-OK-NoS">
@@ -218,7 +218,7 @@
                             <constraint firstItem="4CC-yr-XcI" firstAttribute="bottom" secondItem="Qh0-U1-CUb" secondAttribute="bottom" type="user" id="2s3-bX-feN"/>
                             <constraint firstItem="4CC-yr-XcI" firstAttribute="trailing" secondItem="Qh0-U1-CUb" secondAttribute="trailing" type="user" id="DbH-Ld-Qpi"/>
                             <constraint firstItem="4CC-yr-XcI" firstAttribute="top" secondItem="Qh0-U1-CUb" secondAttribute="top" constant="30" type="user" id="H8r-VM-5SX"/>
-                            <constraint firstItem="OsT-xc-yAH" firstAttribute="top" secondItem="Qh0-U1-CUb" secondAttribute="top" constant="-1" id="OyC-T1-LY8"/>
+                            <constraint firstItem="OsT-xc-yAH" firstAttribute="top" secondItem="Qh0-U1-CUb" secondAttribute="top" type="default" id="f9f-Ht-Frz"/>
                             <constraint firstItem="4CC-yr-XcI" firstAttribute="leading" secondItem="Qh0-U1-CUb" secondAttribute="leading" type="user" id="jm4-sY-wme"/>
                             <constraint firstItem="OsT-xc-yAH" firstAttribute="trailing" secondItem="Qh0-U1-CUb" secondAttribute="trailing" type="default" id="zCf-56-IG0"/>
                         </constraints>
@@ -321,7 +321,7 @@ Set: B</string>
                                             <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="restartGame:" destination="1wo-wb-GyA" eventType="touchUpInside" id="i9M-MF-GRp"/>
+                                            <action selector="restartGame" destination="1wo-wb-GyA" eventType="touchUpInside" id="RWR-IY-HCS"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Wh-7C-Cg8">
@@ -465,9 +465,8 @@ Set: B</string>
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CardGameViewController.h"/>
             <relationships>
                 <relationship kind="action" name="flipCard:" candidateClass="UITapGestureRecognizer"/>
-                <relationship kind="action" name="restartGame:"/>
+                <relationship kind="action" name="restartGame"/>
                 <relationship kind="outlet" name="cardCollectionView" candidateClass="UICollectionView"/>
-                <relationship kind="outlet" name="lastFlipDescriptionLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="scoreLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
@@ -492,6 +491,9 @@ Set: B</string>
         </class>
         <class className="PlayingCardGameViewController" superclassName="CardGameViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PlayingCardGameViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="lastFlipDescriptionLabel" candidateClass="UILabel"/>
+            </relationships>
         </class>
         <class className="PlayingCardView" superclassName="CardView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PlayingCardView.h"/>

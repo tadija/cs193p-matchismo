@@ -7,11 +7,10 @@
 //
 
 #import "CardGameViewController.h"
-#import "GameResult.h"
+//#import "GameResult.h"
 
-@interface CardGameViewController () <UIAlertViewDelegate, UICollectionViewDataSource>
+@interface CardGameViewController () <UICollectionViewDataSource>
 @property (strong, nonatomic) GameResult *gameResult;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @end
 
 @implementation CardGameViewController
@@ -68,8 +67,6 @@
     }
     
     [self updateCustomUI:flippedCardIndex];
-    
-    self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
@@ -97,21 +94,10 @@
     }
 }
 
-- (IBAction)restartGame:(id)sender
+- (IBAction)restartGame
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Re-deal all cards" message:@"Do you want to start a new game?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
-    [alert show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    // start new game
-    if (buttonIndex == 1) {
-        self.game = nil;
-        self.gameResult = nil;
-        [self.cardCollectionView reloadData];
-        [self updateUI:-1];
-    }
+    // abstract
+    @throw [NSException exceptionWithName:@"customRestartGame" reason:@"Method not implemented (abstract)" userInfo:nil];
 }
 
 @end
