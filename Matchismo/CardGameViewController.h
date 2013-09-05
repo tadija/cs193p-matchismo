@@ -16,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame *game; // abstract
 
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card; // abstract
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animated:(BOOL)animated; // abstract
 - (void)updateCustomUI:(NSInteger)flippedCardIndex; // abstract
 - (IBAction)restartGame; // abstract
 

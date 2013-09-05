@@ -43,32 +43,40 @@
     return _selectedCards;
 }
 
+#define ANIMATION_DURATION 0.2
 - (void)setSelectedCards:(NSMutableArray *)selectedCards
 {
     _selectedCards = selectedCards;
     
+    // update selectedCardViews
     for (int i = 0; i < [self.selectedCardViews count]; i++) {
         SetCardView *setCardView = self.selectedCardViews[i];
-        if ([self.selectedCards count] > i) {
-            SetCard *setCard = self.selectedCards[i];
-            setCardView.number = setCard.number;
-            setCardView.symbol = setCard.symbol;
-            setCardView.shading = setCard.shading;
-            setCardView.color = setCard.color;
-            setCardView.faceUp = setCard.isFaceUp;
-            setCardView.unplayable = setCard.isUnplayable;
-            setCardView.penalty = setCard.isPenalty;
-        } else {
-            setCardView.number = 0;
-            setCardView.symbol = 0;
-            setCardView.shading = 0;
-            setCardView.color = 0;
-            setCardView.faceUp = NO;
-            setCardView.unplayable = NO;
-            setCardView.penalty = NO;
-        }
+        [UIView transitionWithView:setCardView
+                          duration:ANIMATION_DURATION
+                           options:(i + 1 == [self.selectedCards count]) ? UIViewAnimationOptionTransitionFlipFromTop : UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            if ([self.selectedCards count] > i) {                                
+                                SetCard *setCard = self.selectedCards[i];
+                                setCardView.number = setCard.number;
+                                setCardView.symbol = setCard.symbol;
+                                setCardView.shading = setCard.shading;
+                                setCardView.color = setCard.color;
+                                setCardView.faceUp = setCard.isFaceUp;
+                                setCardView.unplayable = setCard.isUnplayable;
+                                setCardView.penalty = setCard.isPenalty;
+                            } else {
+                                setCardView.number = 0;
+                                setCardView.symbol = 0;
+                                setCardView.shading = 0;
+                                setCardView.color = 0;
+                                setCardView.faceUp = NO;
+                                setCardView.unplayable = NO;
+                                setCardView.penalty = NO;
+                            }
+                        }
+                        completion:NULL];
     }
-    
+    // reset selectedCardViews
     if ([self.selectedCards count] == [self.selectedCardViews count]) {
         [self.selectedCards removeAllObjects];
     }
@@ -83,32 +91,40 @@
     self.selectedCardViews = [self.selectedCardViews sortedArrayUsingDescriptors:[NSArray arrayWithObject:ascendingSort]];
 }
 
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animated:(BOOL)animated
 {
     if ([cell isKindOfClass:[SetCardCollectionViewCell class]]) {
         SetCardView *setCardView = ((SetCardCollectionViewCell *)cell).setCardView;
         if ([card isKindOfClass:[SetCard class]]) {
-            SetCard *setCard = (SetCard *)card;
-            setCardView.number = setCard.number;
-            setCardView.symbol = setCard.symbol;
-            setCardView.shading = setCard.shading;
-            setCardView.color = setCard.color;
-            setCardView.faceUp = setCard.isFaceUp;
-            setCardView.unplayable = setCard.isUnplayable;
-            setCardView.penalty = setCard.isPenalty;
+            [UIView transitionWithView:setCardView
+                              duration:0.2
+                               options:(animated) ? UIViewAnimationOptionTransitionCrossDissolve : UIViewAnimationOptionTransitionNone
+                            animations:^{
+                                SetCard *setCard = (SetCard *)card;
+                                setCardView.number = setCard.number;
+                                setCardView.symbol = setCard.symbol;
+                                setCardView.shading = setCard.shading;
+                                setCardView.color = setCard.color;
+                                setCardView.faceUp = setCard.isFaceUp;
+                                setCardView.unplayable = setCard.isUnplayable;
+                                setCardView.penalty = setCard.isPenalty;
+                            }
+                            completion:NULL];
         }
     }
 }
 
+#define DISABLED_ALPHA 0.3
+#define ENABLED_ALPHA 1.0
 - (void)updateCustomUI:(NSInteger)flippedCardIndex
 {
     // disable deal button if there are no more cards in deck
     if (!self.game.cardsInDeck) {
         self.dealButton.enabled = NO;
-        self.dealButton.alpha = 0.3;
+        self.dealButton.alpha = DISABLED_ALPHA;
     } else {
         self.dealButton.enabled = YES;
-        self.dealButton.alpha = 1;
+        self.dealButton.alpha = ENABLED_ALPHA;
     }
     
     // manage selectedCards (selectedCardViews)

@@ -35,16 +35,25 @@
     return _game;
 }
 
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
+#define ANIMATION_DURATION 0.2
+#define DISABLED_ALPHA 0.3
+#define ENABLED_ALPHA 1.0
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animated:(BOOL)animated
 {
     if ([cell isKindOfClass:[PlayingCardCollectionViewCell class]]) {
         PlayingCardView *playingCardView = ((PlayingCardCollectionViewCell *)cell).playingCardView;
         if ([card isKindOfClass:[PlayingCard class]]) {
-            PlayingCard *playingCard = (PlayingCard *)card;
-            playingCardView.rank = playingCard.rank;
-            playingCardView.suit = playingCard.suit;
-            playingCardView.faceUp = playingCard.isFaceUp;
-            playingCardView.alpha = playingCard.isUnplayable ? 0.3 : 1.0;
+            [UIView transitionWithView:playingCardView
+                              duration:ANIMATION_DURATION
+                               options:(animated) ? UIViewAnimationOptionTransitionFlipFromLeft : UIViewAnimationOptionTransitionNone
+                            animations:^{
+                                PlayingCard *playingCard = (PlayingCard *)card;
+                                playingCardView.rank = playingCard.rank;
+                                playingCardView.suit = playingCard.suit;
+                                playingCardView.faceUp = playingCard.isFaceUp;
+                                playingCardView.alpha = playingCard.isUnplayable ? DISABLED_ALPHA : ENABLED_ALPHA;
+                            }
+                            completion:NULL];
         }
     }
 }
@@ -79,6 +88,7 @@
         self.cardCount = numberOfCards;
         self.game = nil;
         [self.cardCollectionView reloadData];
+        [self.cardCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
         [self updateCustomUI:-1];
     }
 }

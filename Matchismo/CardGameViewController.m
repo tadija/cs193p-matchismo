@@ -42,7 +42,7 @@
     NSString *reuseIdentifier = [NSString stringWithFormat:@"%@Card", self.game.settings.gameDescription];
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     Card *card = [self.game cardAtIndex:indexPath.item];
-    [self updateCell:cell usingCard:card];
+    [self updateCell:cell usingCard:card animated:NO];
     return cell;
 }
 
@@ -63,13 +63,13 @@
     for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
         NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
         Card *card = [self.game cardAtIndex:indexPath.item];
-        [self updateCell:cell usingCard:card];
+        [self updateCell:cell usingCard:card animated:(indexPath.item == flippedCardIndex && !card.isUnplayable)];
     }
     
     [self updateCustomUI:flippedCardIndex];
 }
 
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animated:(BOOL)animated
 {
     // abstract
     @throw [NSException exceptionWithName:@"updateCell usingCard" reason:@"Method not implemented (abstract)" userInfo:nil];
