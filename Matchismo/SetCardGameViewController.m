@@ -13,7 +13,6 @@
 #import "SetCardCollectionViewCell.h"
 
 @interface SetCardGameViewController() <UIAlertViewDelegate>
-@property (weak, nonatomic) IBOutlet UIButton *dealButton;
 @property (strong, nonatomic) NSMutableArray *selectedCards; // of SetCards
 @property (strong, nonatomic) IBOutletCollection(SetCardView) NSArray *selectedCardViews;
 @end
@@ -108,6 +107,7 @@
                                 setCardView.faceUp = setCard.isFaceUp;
                                 setCardView.unplayable = setCard.isUnplayable;
                                 setCardView.penalty = setCard.isPenalty;
+                                setCardView.hint = setCard.isHint;
                             }
                             completion:NULL];
         }
@@ -117,16 +117,7 @@
 #define DISABLED_ALPHA 0.3
 #define ENABLED_ALPHA 1.0
 - (void)updateCustomUI:(NSInteger)flippedCardIndex
-{
-    // disable deal button if there are no more cards in deck
-    if (!self.game.cardsInDeck) {
-        self.dealButton.enabled = NO;
-        self.dealButton.alpha = DISABLED_ALPHA;
-    } else {
-        self.dealButton.enabled = YES;
-        self.dealButton.alpha = ENABLED_ALPHA;
-    }
-    
+{    
     // manage selectedCards (selectedCardViews)
     NSMutableArray *flippedCards = self.selectedCards;
     Card *flippedCard = [self.game cardAtIndex:flippedCardIndex];
@@ -139,19 +130,14 @@
     }
     
     // remove unplayable cards
-    NSMutableIndexSet *unplayableCardIndexes = [[NSMutableIndexSet alloc] init];
-    NSMutableArray *unplayableCardIndexPaths = [[NSMutableArray alloc] init];
-    // get all unplayable cards
-    for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
-        NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
-        Card *card = [self.game cardAtIndex:indexPath.item];
-        if (card.isUnplayable) {
-            [unplayableCardIndexes addIndex:indexPath.item];
-            [unplayableCardIndexPaths addObject:indexPath];
-        }
-    }
-    // remove them from self.game and self.cardCollectionView
-    if ([unplayableCardIndexPaths count]) {
+    NSIndexSet *unplayableCardIndexes = [self.game findUnplayableCards];
+    if ([unplayableCardIndexes count]) {
+        
+        NSMutableArray *unplayableCardIndexPaths = [[NSMutableArray alloc] init];
+        [unplayableCardIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+            [unplayableCardIndexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+        }];
+        
         [self.cardCollectionView performBatchUpdates:^{
             [self.game deleteCardsAtIndexes:unplayableCardIndexes];
             [self.cardCollectionView deleteItemsAtIndexPaths:unplayableCardIndexPaths];
@@ -163,25 +149,6 @@
 }
 
 #pragma mark - Target/Action/Gestures
-
-#define DEAL_CARDS_COUNT 3
-- (IBAction)dealMoreCards:(UIButton *)sender
-{
-    NSIndexSet *newCardIndexes = [self.game dealCards:DEAL_CARDS_COUNT];
-    NSMutableArray *newCardIndexPaths = [[NSMutableArray alloc] init];
-    
-    [newCardIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        [newCardIndexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
-    }];
-    
-    [self.cardCollectionView performBatchUpdates:^{
-        [self.cardCollectionView insertItemsAtIndexPaths:newCardIndexPaths];
-    } completion:^(BOOL finished) {
-        [self.cardCollectionView scrollToItemAtIndexPath:[newCardIndexPaths lastObject] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
-    }];
-    
-    [self updateCustomUI:-1];
-}
 
 - (IBAction)restartGame
 {

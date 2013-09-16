@@ -40,7 +40,7 @@
 
 #define CORNER_RADIUS 7
 #define LINE_WIDTH 2.0
-#define COLOR_PERCENT 0.93
+#define COLOR_PERCENT 0.80
 #define SYMBOL_WIDTH_PERCENTAGE .7
 #define SYMBOL_HEIGHT_PERCENTAGE .6
 #define STRIPE_OFFSET 5
@@ -53,12 +53,13 @@
     [roundedRect addClip];
     
     // set blank card fill and stroke color
-    UIColor *lightBlueColor = [UIColor colorWithRed:COLOR_PERCENT green:COLOR_PERCENT blue:1 alpha:1];
+    UIColor *lightBlueColor = [UIColor colorWithRed:COLOR_PERCENT/2 green:COLOR_PERCENT blue:1 alpha:1];
     UIColor *lightRedColor = [UIColor colorWithRed:1 green:COLOR_PERCENT blue:COLOR_PERCENT alpha:1];
     UIColor *lightGreenColor = [UIColor colorWithRed:COLOR_PERCENT green:1 blue:COLOR_PERCENT alpha:1];
+    UIColor *lightYellowColor = [UIColor colorWithRed:1 green:1 blue:COLOR_PERCENT alpha:1];
     
-    UIColor *cardStrokeColor = (self.isFaceUp) ? ((self.isPenalty) ? [UIColor redColor] : (self.isUnplayable) ? [UIColor greenColor] : [UIColor blueColor]) : [UIColor grayColor];
-    UIColor *cardFillColor = (self.isFaceUp) ? ((self.isPenalty) ? lightRedColor : (self.isUnplayable) ? lightGreenColor : lightBlueColor) : [UIColor whiteColor];
+    UIColor *cardStrokeColor = (self.isFaceUp) ? ((self.isPenalty) ? [UIColor redColor] : (self.isUnplayable) ? [UIColor greenColor] : [UIColor blueColor]) : (self.isHint) ? [UIColor yellowColor] : [UIColor grayColor];
+    UIColor *cardFillColor = (self.isFaceUp) ? ((self.isPenalty) ? lightRedColor : (self.isUnplayable) ? lightGreenColor : lightBlueColor) : (self.isHint) ? lightYellowColor : [UIColor whiteColor];
     
     [cardFillColor setFill];
     UIRectFill(self.bounds);

@@ -76,6 +76,8 @@
                                                                    andColor:[UIColor colorWithRed:1 green:0.25 blue:0.25 alpha:1]]];
     [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Mismatch: -%d \n", self.settings.mismatchPenalty]
                                                                    andColor:[UIColor colorWithRed:1 green:0.25 blue:0.25 alpha:1]]];
+    [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Hint: -%d \n", self.settings.hintPenalty]
+                                                                   andColor:[UIColor colorWithRed:1 green:0.25 blue:0.25 alpha:1]]];
     [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Match: %d \n", self.settings.matchBonus]
                                                                    andColor:[UIColor colorWithRed:0.5 green:1 blue:0 alpha:1]]];
     [completeString appendAttributedString:[self createAttributedStringWith:[NSString stringWithFormat:@"Set: %d \n", self.settings.setBonus]

@@ -58,7 +58,7 @@
         [self drawCorners];
     } else {
         CGRect cardBack = CGRectMake(self.bounds.origin.x + CARD_BACK_INSET, self.bounds.origin.y + CARD_BACK_INSET, self.bounds.size.width - CARD_BACK_INSET * 2, self.bounds.size.height - CARD_BACK_INSET * 2);
-        [[UIImage imageNamed:@"redCardBack.jpg"] drawInRect:cardBack];
+        [[UIImage imageNamed:(self.isHint) ? @"blueCardBack.jpg" : @"redCardBack.jpg"] drawInRect:cardBack];
     }
     
     [[UIColor blackColor] setStroke];

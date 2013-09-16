@@ -7,12 +7,14 @@
 //
 
 #import "CardMatchingGame.h"
+#import "PlayingCard.h"
+#import "SetCard.h"
 
 @interface CardMatchingGame()
 @property (strong, nonatomic) NSMutableArray *cards;
 @property (strong, nonatomic) Deck *deck;
-@property (nonatomic) int score;
-@property (nonatomic) NSUInteger matchCount;
+@property (nonatomic, readwrite) NSUInteger matchCount;
+@property (nonatomic, readwrite) int score;
 @property (nonatomic) NSMutableString *flipInfo;
 @property (nonatomic, readwrite) NSMutableArray *allFlipsInfo;
 @end
@@ -173,9 +175,97 @@
     return newCardIndexes;
 }
 
+- (NSIndexSet *)findUnplayableCards
+{
+    NSMutableIndexSet *unplayableCardIndexes = [[NSMutableIndexSet alloc] init];
+    
+    for (Card *card in self.cards) {
+        if (card.isUnplayable) {
+            [unplayableCardIndexes addIndex:[self.cards indexOfObject:card]];
+        }
+    }
+    
+    return unplayableCardIndexes;
+}
+
 - (void)deleteCardsAtIndexes:(NSIndexSet *)indexes
 {
     [self.cards removeObjectsAtIndexes:indexes];
+}
+
+- (BOOL)findHintAndHighlightCards:(BOOL)highlight
+{
+    BOOL hintExists = NO;
+    
+    // remove hint from all cards
+    for (Card *card in self.cards) {
+        card.hint = NO;
+    }
+    
+    // iterate all playable cards in the game
+    for (Card *cardToCheck in self.cards) {
+        
+        if (!cardToCheck.isUnplayable) {
+            
+            // create array of all other playable cards
+            NSMutableArray *allOtherCards = [self.cards mutableCopy];
+            [allOtherCards removeObjectsAtIndexes:[self findUnplayableCards]];
+            [allOtherCards removeObject:cardToCheck];            
+        
+            // iterate all other playable cards in the game
+            for (int i = 0; i < [allOtherCards count]; i++) {
+                
+                // if cardToCheck is PlayingCard check for match
+                if ([cardToCheck isKindOfClass:[PlayingCard class]]) {
+                    // create all combinations of other card
+                    NSMutableArray *otherCards = [[NSMutableArray alloc] initWithCapacity:1];
+                    otherCards[0] = (PlayingCard *)allOtherCards[i];
+                    // check for match in every combination
+                    int score = [cardToCheck match:otherCards];
+                    if (score) {
+                        // set hint to cards which make match
+                        if (highlight) {
+                            cardToCheck.hint = YES;
+                            for (Card *otherCard in otherCards) {
+                                otherCard.hint = YES;
+                            }
+                        }
+                        // set score penalty and return true
+                        self.score -= self.settings.hintPenalty;
+                        hintExists = YES;
+                        goto hintFound;
+                    }
+
+                // if cardToCheck is SetCard check for set
+                } else if ([cardToCheck isKindOfClass:[SetCard class]]) {
+                    // create all combinations of two other cards
+                    for (int j = i + 1; j < [allOtherCards count] - 1; j++) {
+                        NSMutableArray *otherCards = [[NSMutableArray alloc] initWithCapacity:2];
+                        otherCards[0] = (SetCard *)allOtherCards[i];
+                        otherCards[1] = (SetCard *)allOtherCards[j];
+                        // check for set in every combination
+                        int score = [cardToCheck match:otherCards];
+                        if (score) {
+                            // set hint to cards which make set
+                            if (highlight) {
+                                cardToCheck.hint = YES;
+                                for (Card *otherCard in otherCards) {
+                                    otherCard.hint = YES;
+                                }
+                            }
+                            // set score penalty and return true
+                            self.score -= self.settings.hintPenalty;
+                            hintExists = YES;
+                            goto hintFound;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    hintFound:;
+    return hintExists;
 }
 
 @end

@@ -15,6 +15,7 @@
 
 @property (nonatomic, readonly) int flipCost;
 @property (nonatomic, readonly) int mismatchPenalty;
+@property (nonatomic, readonly) int hintPenalty;
 @property (nonatomic, readonly) int matchBonus;
 @property (nonatomic, readonly) int setBonus;
 

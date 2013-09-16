@@ -51,4 +51,10 @@
     [self setNeedsDisplay];
 }
 
+- (void)setHint:(BOOL)hint
+{
+    _hint = hint;
+    [self setNeedsDisplay];
+}
+
 @end

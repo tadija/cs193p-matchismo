@@ -13,5 +13,6 @@
 @property (nonatomic, getter = isFaceUp) BOOL faceUp;
 @property (nonatomic, getter = isUnplayable) BOOL unplayable;
 @property (nonatomic, getter = isPenalty) BOOL penalty;
+@property (nonatomic, getter = isHint) BOOL hint;
 
 @end

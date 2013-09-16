@@ -51,6 +51,8 @@
                                 playingCardView.rank = playingCard.rank;
                                 playingCardView.suit = playingCard.suit;
                                 playingCardView.faceUp = playingCard.isFaceUp;
+                                playingCardView.unplayable = playingCard.isUnplayable;
+                                playingCardView.hint = playingCard.isHint;
                                 playingCardView.alpha = playingCard.isUnplayable ? DISABLED_ALPHA : ENABLED_ALPHA;
                             }
                             completion:NULL];
@@ -65,6 +67,8 @@
     
     self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
+
+#pragma mark - Target/Action/Gestures
 
 - (IBAction)restartGame
 {

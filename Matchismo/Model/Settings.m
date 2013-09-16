@@ -11,6 +11,7 @@
 @interface Settings()
 @property (nonatomic, readwrite) int flipCost;
 @property (nonatomic, readwrite) int mismatchPenalty;
+@property (nonatomic, readwrite) int hintPenalty;
 @property (nonatomic, readwrite) int matchBonus;
 @property (nonatomic, readwrite) int setBonus;
 
@@ -57,16 +58,19 @@
     if ([difficulty isEqualToString:@"Easy"]) {
         self.flipCost = 0;
         self.mismatchPenalty = 0;
+        self.hintPenalty = 1;
         self.matchBonus = 6;
         self.setBonus = 8;
     } else if ([difficulty isEqualToString:@"Normal"]) {
         self.flipCost = 1;
         self.mismatchPenalty = 1;
+        self.hintPenalty = 2;
         self.matchBonus = 5;
         self.setBonus = 7;
     } else if ([difficulty isEqualToString:@"Hard"]) {
         self.flipCost = 2;
         self.mismatchPenalty = 2;
+        self.hintPenalty = 4;
         self.matchBonus = 4;
         self.setBonus = 6;
     }
