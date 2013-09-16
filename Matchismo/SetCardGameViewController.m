@@ -157,6 +157,9 @@
             [self.cardCollectionView deleteItemsAtIndexPaths:unplayableCardIndexPaths];
         } completion:nil];
     }
+    
+    // update score
+    self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
 
 #pragma mark - Target/Action/Gestures
