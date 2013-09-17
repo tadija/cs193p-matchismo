@@ -22,12 +22,13 @@
 @synthesize game = _game;
 @synthesize selectedCards = _selectedCards;
 
+#define SET_CARD_COUNT 12
 #define MATCH_COUNT 3
 
 - (CardMatchingGame *)game
 {
     if (!_game) {
-        _game = [[CardMatchingGame alloc] initWithCardCount:12
+        _game = [[CardMatchingGame alloc] initWithCardCount:SET_CARD_COUNT
                                                   usingDeck:[[SetCardDeck alloc] init]
                                               andMatchCount:MATCH_COUNT
                                                withSettings:[[Settings alloc] initGame:@"Set" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
@@ -117,7 +118,10 @@
 #define DISABLED_ALPHA 0.3
 #define ENABLED_ALPHA 1.0
 - (void)updateCustomUI:(NSInteger)flippedCardIndex
-{    
+{
+    // refresh cards left label
+    self.cardsLeft = self.game.cardsInDeck;
+    
     // manage selectedCards (selectedCardViews)
     NSMutableArray *flippedCards = self.selectedCards;
     Card *flippedCard = [self.game cardAtIndex:flippedCardIndex];
@@ -144,7 +148,7 @@
         } completion:nil];
     }
     
-    // update score
+    // refresh score label
     self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
 

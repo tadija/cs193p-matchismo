@@ -13,6 +13,8 @@
 @interface CardGameViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UICollectionView *cardCollectionView;
+@property (nonatomic) NSUInteger cardsLeft;
+@property (weak, nonatomic) IBOutlet UILabel *cardsLeftLabel;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame *game; // abstract
 

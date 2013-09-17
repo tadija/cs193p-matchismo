@@ -21,16 +21,20 @@
 
 @synthesize game = _game;
 
+#define MATCH_CARD_COUNT 24
+
 - (NSUInteger)cardCount
 {
-    return (!_cardCount) ? 24 : _cardCount;
+    return (!_cardCount) ? MATCH_CARD_COUNT : _cardCount;
 }
+
+#define MATCH_COUNT 2
 
 - (CardMatchingGame *)game
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:self.cardCount
                                                           usingDeck:[[PlayingCardDeck alloc] init]
-                                                      andMatchCount:2
+                                                      andMatchCount:MATCH_COUNT
                                                        withSettings:[[Settings alloc] initGame:@"Match" WithDifficulty:[SettingsViewController getSavedDifficulty]]];
     return _game;
 }
@@ -62,9 +66,14 @@
 
 - (void)updateCustomUI:(NSInteger)flippedCardIndex
 {
+    // refresh cards left label
+    self.cardsLeft = self.game.cardsInDeck;    
+    
+    // refresh flip info label
     NSString *flipInfo = [self.game.allFlipsInfo lastObject];
     self.lastFlipDescriptionLabel.attributedText = [[NSAttributedString alloc] initWithString:flipInfo];
     
+    // refresh score label
     self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
 
@@ -100,8 +109,8 @@
 - (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
 {
     NSUInteger numberOfCards = [[alertView textFieldAtIndex:0].text intValue];
-    
-    return (numberOfCards >= 2 && numberOfCards <= 52) ? YES : NO;
+    // allow if number is even and between 2 and 52
+    return (numberOfCards >= 2 && numberOfCards <= 52 && numberOfCards % 2 == 0) ? YES : NO;
 }
 
 @end

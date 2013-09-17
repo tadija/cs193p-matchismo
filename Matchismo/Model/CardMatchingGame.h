@@ -11,6 +11,13 @@
 
 @interface CardMatchingGame : NSObject
 
+@property (strong, nonatomic) Settings *settings;
+@property (nonatomic, readonly) int score;
+@property (nonatomic, readonly) NSUInteger matchCount;
+@property (nonatomic, readonly) NSUInteger cardsInGame;
+@property (nonatomic, readonly) NSUInteger cardsInDeck;
+@property (nonatomic, readonly) NSMutableArray *allFlipsInfo;
+
 // designated initializer
 - (id)initWithCardCount:(NSUInteger)count
               usingDeck:(Deck *)deck
@@ -23,13 +30,5 @@
 - (void)deleteCardsAtIndexes:(NSIndexSet *)indexes;
 - (NSIndexSet *)dealCards:(NSUInteger)numberOfCards;
 - (BOOL)findHintAndHighlightCards:(BOOL)highlight;
-
-@property (nonatomic, readonly) int score;
-@property (strong, nonatomic) Settings *settings;
-@property (nonatomic, readonly) NSUInteger matchCount;
-@property (nonatomic, readonly) NSUInteger cardsInGame;
-@property (nonatomic, readonly) NSUInteger cardsInDeck;
-
-@property (nonatomic, readonly) NSMutableArray *allFlipsInfo;
 
 @end
