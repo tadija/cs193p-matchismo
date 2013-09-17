@@ -118,10 +118,7 @@
 #define DISABLED_ALPHA 0.3
 #define ENABLED_ALPHA 1.0
 - (void)updateCustomUI:(NSInteger)flippedCardIndex
-{
-    // refresh cards left label
-    self.cardsLeft = self.game.cardsInDeck;
-    
+{    
     // manage selectedCards (selectedCardViews)
     NSMutableArray *flippedCards = self.selectedCards;
     Card *flippedCard = [self.game cardAtIndex:flippedCardIndex];
@@ -147,9 +144,6 @@
             [self.cardCollectionView deleteItemsAtIndexPaths:unplayableCardIndexPaths];
         } completion:nil];
     }
-    
-    // refresh score label
-    self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
 
 #pragma mark - Target/Action/Gestures
@@ -166,8 +160,10 @@
     // start new game
     if (buttonIndex == 1) {
         self.game = nil;
+        self.multiplayerScores = nil;
+        self.currentPlayer = 1;        
         [self.cardCollectionView reloadData];
-        [self updateCustomUI:-1];
+        [self updateUI:-1];        
     }
 }
 

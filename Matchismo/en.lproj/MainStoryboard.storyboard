@@ -14,13 +14,17 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zt4-eo-sV5">
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kgb-dW-40M">
+                                    <label opaque="NO" clipsSubviews="YES" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kgb-dW-40M">
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="160" id="5l4-98-mSU"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="2pP-c1-wIU" appends="YES" id="hM5-Hf-aOC"/>
+                                        </connections>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SJ4-vW-A9Z">
                                         <color key="backgroundColor" red="0.50196081399917603" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -163,6 +167,11 @@
                         <action selector="dealMoreCards:" destination="2" id="fwb-oC-HZD"/>
                     </connections>
                 </swipeGestureRecognizer>
+                <tapGestureRecognizer id="2pP-c1-wIU">
+                    <connections>
+                        <action selector="changeCurrentPlayer:" destination="2" id="xWg-Xv-Jln"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="281" y="-811"/>
         </scene>
@@ -317,13 +326,18 @@ Set: B</string>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x0u-mj-4Ky">
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Szf-fP-o2E">
+                                    <label opaque="NO" clipsSubviews="YES" contentMode="left" text="0" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="64" translatesAutoresizingMaskIntoConstraints="NO" id="Szf-fP-o2E">
+                                        <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="55" type="user" id="ekv-G7-3GY"/>
+                                            <constraint firstAttribute="width" constant="64" type="user" id="NkO-xp-FK9"/>
+                                            <constraint firstAttribute="height" constant="50" id="gEe-7b-9Ac"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="f1g-Mv-u4v" appends="YES" id="6ra-MD-daZ"/>
+                                        </connections>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CK3-gF-exb">
                                         <color key="backgroundColor" red="0.40000000596046448" green="0.80000001192092896" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -385,22 +399,22 @@ Set: B</string>
                                     <constraint firstItem="1sb-zU-vwv" firstAttribute="bottom" secondItem="x0u-mj-4Ky" secondAttribute="bottom" type="user" id="8XN-wM-eiA"/>
                                     <constraint firstItem="khO-vh-huc" firstAttribute="leading" secondItem="x0u-mj-4Ky" secondAttribute="leading" constant="111" id="C6X-9O-Jyi"/>
                                     <constraint firstItem="1sb-zU-vwv" firstAttribute="top" secondItem="x0u-mj-4Ky" secondAttribute="top" constant="20" symbolic="YES" type="default" id="GQz-EO-umo"/>
+                                    <constraint firstAttribute="trailing" secondItem="Szf-fP-o2E" secondAttribute="trailing" constant="63" type="user" id="HiT-YL-GFj"/>
+                                    <constraint firstItem="SQA-PM-bOy" firstAttribute="bottom" secondItem="Szf-fP-o2E" secondAttribute="bottom" type="default" id="Huu-Fp-XUR"/>
                                     <constraint firstAttribute="height" constant="80" type="user" id="IMf-Br-8eA"/>
+                                    <constraint firstItem="Szf-fP-o2E" firstAttribute="leading" secondItem="x0u-mj-4Ky" secondAttribute="leading" constant="193" type="user" id="JjP-J4-KPY"/>
+                                    <constraint firstItem="CK3-gF-exb" firstAttribute="trailing" secondItem="x0u-mj-4Ky" secondAttribute="trailing" type="user" id="LIF-E0-UYe"/>
+                                    <constraint firstItem="Szf-fP-o2E" firstAttribute="top" secondItem="SQA-PM-bOy" secondAttribute="top" type="default" id="Lma-KO-naq"/>
                                     <constraint firstItem="SQA-PM-bOy" firstAttribute="bottom" secondItem="khO-vh-huc" secondAttribute="bottom" type="user" id="Mzd-U9-LcZ"/>
                                     <constraint firstItem="80g-RP-PGn" firstAttribute="leading" secondItem="x0u-mj-4Ky" secondAttribute="leading" type="default" id="NnW-Vg-CMo"/>
-                                    <constraint firstItem="8aG-Ro-bSG" firstAttribute="centerY" secondItem="1sb-zU-vwv" secondAttribute="centerY" type="user" id="RPL-4i-dcc"/>
-                                    <constraint firstItem="CK3-gF-exb" firstAttribute="leading" secondItem="Szf-fP-o2E" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="S0h-IS-iAS"/>
                                     <constraint firstItem="CK3-gF-exb" firstAttribute="top" secondItem="x0u-mj-4Ky" secondAttribute="top" constant="20" symbolic="YES" type="default" id="VDc-RC-G3X"/>
-                                    <constraint firstItem="8aG-Ro-bSG" firstAttribute="top" secondItem="x0u-mj-4Ky" secondAttribute="top" constant="25" id="Y3C-3a-ZAV"/>
-                                    <constraint firstItem="Szf-fP-o2E" firstAttribute="centerY" secondItem="SQA-PM-bOy" secondAttribute="centerY" type="user" id="Yrr-B8-EnL"/>
                                     <constraint firstItem="80g-RP-PGn" firstAttribute="top" secondItem="x0u-mj-4Ky" secondAttribute="top" type="default" id="Zep-tH-5CL"/>
                                     <constraint firstItem="80g-RP-PGn" firstAttribute="trailing" secondItem="x0u-mj-4Ky" secondAttribute="trailing" type="default" id="bz9-ro-m60"/>
+                                    <constraint firstItem="1sb-zU-vwv" firstAttribute="centerY" secondItem="8aG-Ro-bSG" secondAttribute="centerY" type="default" id="cSt-rk-Awd"/>
                                     <constraint firstItem="SQA-PM-bOy" firstAttribute="leading" secondItem="x0u-mj-4Ky" secondAttribute="leading" constant="154" type="user" id="d6j-uX-iWU"/>
                                     <constraint firstItem="1sb-zU-vwv" firstAttribute="leading" secondItem="x0u-mj-4Ky" secondAttribute="leading" type="default" id="eyR-6r-8wN"/>
                                     <constraint firstItem="khO-vh-huc" firstAttribute="leading" secondItem="8aG-Ro-bSG" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="gco-eM-MB9"/>
                                     <constraint firstItem="8aG-Ro-bSG" firstAttribute="leading" secondItem="1sb-zU-vwv" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="iIS-bd-cnS"/>
-                                    <constraint firstItem="Szf-fP-o2E" firstAttribute="top" secondItem="x0u-mj-4Ky" secondAttribute="top" constant="35" type="user" id="ppJ-bV-aaL"/>
-                                    <constraint firstItem="CK3-gF-exb" firstAttribute="trailing" secondItem="x0u-mj-4Ky" secondAttribute="trailing" type="user" id="qRO-ae-b0n"/>
                                     <constraint firstItem="SQA-PM-bOy" firstAttribute="leading" secondItem="khO-vh-huc" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="rCe-Zw-jSs"/>
                                     <constraint firstItem="SQA-PM-bOy" firstAttribute="top" secondItem="khO-vh-huc" secondAttribute="top" type="user" id="rsN-8T-ZcH"/>
                                     <constraint firstItem="CK3-gF-exb" firstAttribute="bottom" secondItem="x0u-mj-4Ky" secondAttribute="bottom" type="default" id="u2k-I9-QPL"/>
@@ -454,10 +468,10 @@ Set: B</string>
                             <constraint firstItem="x0u-mj-4Ky" firstAttribute="bottom" secondItem="zQW-IH-KpE" secondAttribute="bottom" type="default" id="1hS-h5-Udz"/>
                             <constraint firstAttribute="bottom" secondItem="dmv-sp-S6h" secondAttribute="bottom" constant="80" type="user" id="7Hf-JU-M97"/>
                             <constraint firstItem="dmv-sp-S6h" firstAttribute="leading" secondItem="zQW-IH-KpE" secondAttribute="leading" type="default" id="QDV-ZK-WnE"/>
-                            <constraint firstItem="x0u-mj-4Ky" firstAttribute="trailing" secondItem="zQW-IH-KpE" secondAttribute="trailing" type="default" id="VzE-LV-ITD"/>
+                            <constraint firstItem="x0u-mj-4Ky" firstAttribute="trailing" secondItem="zQW-IH-KpE" secondAttribute="trailing" type="user" id="SIT-3j-S0d"/>
                             <constraint firstItem="dmv-sp-S6h" firstAttribute="top" secondItem="zQW-IH-KpE" secondAttribute="top" type="user" id="Xvp-Lk-1Nf"/>
                             <constraint firstItem="dmv-sp-S6h" firstAttribute="trailing" secondItem="zQW-IH-KpE" secondAttribute="trailing" type="default" id="bOe-fd-43r"/>
-                            <constraint firstItem="x0u-mj-4Ky" firstAttribute="leading" secondItem="zQW-IH-KpE" secondAttribute="leading" type="default" id="jlT-nA-QRV"/>
+                            <constraint firstItem="x0u-mj-4Ky" firstAttribute="leading" secondItem="zQW-IH-KpE" secondAttribute="leading" type="user" id="jlT-nA-QRV"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Set" image="set.png" id="N43-Iz-2rU"/>
@@ -481,6 +495,11 @@ Set: B</string>
                         <action selector="dealMoreCards:" destination="1wo-wb-GyA" id="1Ui-wo-7sm"/>
                     </connections>
                 </swipeGestureRecognizer>
+                <tapGestureRecognizer id="f1g-Mv-u4v">
+                    <connections>
+                        <action selector="changeCurrentPlayer:" destination="1wo-wb-GyA" id="AAE-RX-X4z"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="281" y="-207"/>
         </scene>
@@ -507,7 +526,6 @@ Set: B</string>
         <class className="GameResultViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GameResultViewController.h"/>
             <relationships>
-                <relationship kind="action" name="changeSorting:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="display" candidateClass="UITextView"/>
             </relationships>
         </class>
@@ -547,7 +565,6 @@ Set: B</string>
         <class className="SettingsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SettingsViewController.h"/>
             <relationships>
-                <relationship kind="action" name="changeDifficulty:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="difficultyPicker" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="display" candidateClass="UITextView"/>
             </relationships>
@@ -560,9 +577,6 @@ Set: B</string>
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

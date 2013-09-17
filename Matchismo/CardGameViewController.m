@@ -27,18 +27,20 @@
     return _gameResult;
 }
 
-- (void)setCardsLeft:(NSUInteger)cardsLeft
+- (NSMutableArray *)multiplayerScores
 {
-    _cardsLeft = cardsLeft;
-    
-    // set label for cards left in the deck
-    NSString *cardsLeftString = [[NSString alloc] init];
-    if (cardsLeft > 0) {
-        cardsLeftString = [NSString stringWithFormat:@"Cards in deck: %d (swipe right to deal more cards)", self.game.cardsInDeck];
-    } else {
-        cardsLeftString = @"There are no more cards in the deck...";
+    if (!_multiplayerScores) {
+        _multiplayerScores = [NSMutableArray arrayWithObjects:@0, @0, nil];
     }
-    self.cardsLeftLabel.text = cardsLeftString;
+    return _multiplayerScores;
+}
+
+- (int)currentPlayer
+{
+    if (!_currentPlayer) {
+        _currentPlayer = 1;
+    }
+    return _currentPlayer;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -85,8 +87,21 @@
         [self updateCell:cell usingCard:card animated:(indexPath.item == flippedCardIndex && !card.isUnplayable)];
     }
     
+    // set label for cards left in the deck
+    NSString *cardsLeftString = [[NSString alloc] init];
+    if (self.game.cardsInDeck > 0) {
+        cardsLeftString = [NSString stringWithFormat:@"Cards in deck: %d (swipe right to deal more cards)", self.game.cardsInDeck];
+    } else {
+        cardsLeftString = @"There are no more cards in the deck...";
+    }
+    self.cardsLeftLabel.text = cardsLeftString;
+    
     // update game specific UI
     [self updateCustomUI:flippedCardIndex];
+    
+    // refresh score label for current player
+    self.multiplayerScores[self.currentPlayer - 1] = @(self.game.score - [self.multiplayerScores[(self.currentPlayer > 1) ? 0 : 1] intValue]);
+    self.scoreLabel.text = [NSString stringWithFormat:@"P%d (%@)", self.currentPlayer, self.multiplayerScores[self.currentPlayer - 1]];
 }
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card animated:(BOOL)animated
@@ -102,6 +117,12 @@
 }
 
 #define pragma mark - Target/Action/Gestures
+
+- (IBAction)changeCurrentPlayer:(UITapGestureRecognizer *)sender
+{
+    self.currentPlayer = (self.currentPlayer > 1) ? 1 : 2;
+    [self updateUI:-1];
+}
 
 - (IBAction)flipCard:(UITapGestureRecognizer *)gesture
 {
@@ -166,9 +187,7 @@
                             }
                             completion:NULL];
         }
-        // update score (hint penalty)
-        self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
-    
+        [self updateUI:-1];
     // if no hint available
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No hint available!"

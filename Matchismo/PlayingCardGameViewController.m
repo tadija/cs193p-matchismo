@@ -66,15 +66,9 @@
 
 - (void)updateCustomUI:(NSInteger)flippedCardIndex
 {
-    // refresh cards left label
-    self.cardsLeft = self.game.cardsInDeck;    
-    
     // refresh flip info label
     NSString *flipInfo = [self.game.allFlipsInfo lastObject];
     self.lastFlipDescriptionLabel.attributedText = [[NSAttributedString alloc] initWithString:flipInfo];
-    
-    // refresh score label
-    self.scoreLabel.text = [NSString stringWithFormat:@"%d", self.game.score];
 }
 
 #pragma mark - Target/Action/Gestures
@@ -100,9 +94,11 @@
         NSUInteger numberOfCards = [[alertView textFieldAtIndex:0].text intValue];
         self.cardCount = numberOfCards;
         self.game = nil;
+        self.multiplayerScores = nil;
+        self.currentPlayer = 1;
         [self.cardCollectionView reloadData];
         [self.cardCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-        [self updateCustomUI:-1];
+        [self updateUI:-1];
     }
 }
 
